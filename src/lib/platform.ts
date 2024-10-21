@@ -1,13 +1,12 @@
-import type { Point } from "./point";
+import { HitBox } from "./hitbox";
+import type { Vector2 } from "./vector2";
 
-export class Platform {
-  pos: Point;
-  w: number;
-  h: number;
+export class Platform extends HitBox {
+  friction: number;
 
-  constructor (x: number, y: number, width: number, height: number) {
-    this.pos = {x, y};
-    this.w = width;
-    this.h = height;
+  constructor (pos: Vector2, width: number, height: number, friction: number) {
+    super(pos, width, height);
+
+    this.friction = friction;
   }
 }
