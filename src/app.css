@@ -7,6 +7,8 @@
   --fg1: #eceff4;
   --fg2: #e5e9f0;
   --fg3: #d8dee9;
+
+  --monospace: 'Jetbrains Mono', monospace;
 }
 
 body, html, main {

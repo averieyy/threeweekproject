@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Game } from "$lib/game";
+  import { Game } from "$lib/parkour/game";
   import { onMount } from "svelte";
 
   let canvas: HTMLCanvasElement;
@@ -28,6 +28,10 @@
 
   canvas {
     image-rendering: pixelated;
-    aspect-ratio: 4 / 3;
+
+    height: 100%;
+    width: 100%;
+
+    object-fit: contain;
   }
 </style>

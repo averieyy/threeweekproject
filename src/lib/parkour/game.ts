@@ -1,6 +1,6 @@
 import { Camera } from "./camera";
 import { Level } from "./level";
-import type { Platform } from "./platform";
+import { Platform } from "./platform";
 import { Player } from "./player";
 
 export class Game {
@@ -15,6 +15,8 @@ export class Game {
 
   player: Player;
   camera: Camera;
+
+  directions: { up: boolean, down: boolean, left: boolean, right: boolean } = {up: false, down: false, left: false, right: false };
 
   constructor (canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -33,21 +35,48 @@ export class Game {
     this.player = new Player('test', Level.levels[0]);
     this.camera = new Camera(this.player.position, 200, 150);
     this.player.centercamera(this.camera);
-
+    
+    this.keybinds();
     this.resize();
 
     this.mainloop();
   }
 
+  keybinds () {
+    document.addEventListener('keydown', (ev) => {
+      console.log(ev.key);
+      
+      switch(ev.key) {
+        case ' ':
+        case 'ArrowUp': this.directions.up = true; break;
+        case 'ArrowDown': this.directions.down = true; break;
+        case 'ArrowLeft': this.directions.left = true; break;
+        case 'ArrowRight': this.directions.right = true; break;
+      }
+    });
+
+    document.addEventListener('keyup', (ev) => {
+      switch(ev.key) {
+        case ' ':
+        case 'ArrowUp': this.directions.up = false; break;
+        case 'ArrowDown': this.directions.down = false; break;
+        case 'ArrowLeft': this.directions.left = false; break;
+        case 'ArrowRight': this.directions.right = false; break;
+      }
+    });
+  }
+
   render() {
+    this.bufferctx.clearRect(0,0,this.canvaswidth, this.canvasheight);
+
     for (let platform of this.player.level.platforms) {
       platform.render(this.bufferctx, this.camera);
     }
     
     this.player.render(this.bufferctx, this.camera);
 
+
     // Switch buffers
-    const image = 
     this.ctx.putImageData(this.bufferctx.getImageData(0, 0, this.canvaswidth, this.canvasheight), 0, 0);
   }
 
@@ -55,26 +84,31 @@ export class Game {
     const idealWidth = 200
     const idealHeight = 150;
 
-    const visualw = this.canvas.clientWidth;
-    const visualh = this.canvas.clientHeight;
-
-    let scalefactor: number;
-
-    if (visualh / idealHeight < visualw / idealWidth) {
-      scalefactor = visualh / idealHeight;
-    }
-    else {
-      scalefactor = visualw / idealWidth;
-    }
-
-    this.canvas.width = visualw / scalefactor;
-    this.canvas.height = visualh / scalefactor;
+    this.canvas.width = idealWidth;
+    this.canvas.height = idealHeight;
   }
 
   mainloop () {
 
     setInterval(() => {
+      this.player.move(this.directions);
+      // Tick
 
+      this.player.position.x += this.player.velocity.x;
+      this.player.position.y += this.player.velocity.y;
+
+      this.player.gravitate();
+      this.player.doFriction();
+      
+      this.player.onGround = this.player.checkIfOnGround();
+      
+      if (this.player.onGround && this.player.velocity.y !== 0) {
+        this.player.velocity.y = 0;
+      }
+
+      this.player.updateHitBox();
+
+      this.player.centercamera(this.camera);
 
       // Render
       this.resize();

@@ -1,3 +1,4 @@
+import type { HitBox } from "./hitbox";
 import type { Vector2 } from "./vector2";
 
 export class Camera {
@@ -11,7 +12,7 @@ export class Camera {
     this.height = height;
   }
 
-  move (center: Vector2) {
-    this.center = center;
+  move (target: HitBox) {
+    this.center = { x: target.position.x + target.width / 2, y: target.position.y + target.height / 2 };
   }
 }

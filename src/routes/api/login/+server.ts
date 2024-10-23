@@ -1,6 +1,9 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { createTransport } from 'nodemailer';
+import { createTestAccount, createTransport } from 'nodemailer';
 import 'dotenv/config';
+import { TOTP } from 'otpauth';
+
+const testaccount = await createTestAccount();
 
 const transport = createTransport({
   host: process.env.EMAILHOST,
