@@ -44,8 +44,6 @@ export class Game {
 
   keybinds () {
     document.addEventListener('keydown', (ev) => {
-      console.log(ev.key);
-      
       switch(ev.key) {
         case ' ':
         case 'ArrowUp': this.directions.up = true; break;
@@ -97,16 +95,19 @@ export class Game {
       this.player.position.x += this.player.velocity.x;
       this.player.position.y += this.player.velocity.y;
 
+      console.log(!!this.player.ground);
+
       this.player.gravitate();
       this.player.doFriction();
+
+      const ground = this.player.getGround();
+      this.player.ground = ground;
+
+      this.player.updatePosition();
       
-      this.player.onGround = this.player.checkIfOnGround();
-      
-      if (this.player.onGround && this.player.velocity.y !== 0) {
+      if (this.player.ground && this.player.velocity.y !== 0) {
         this.player.velocity.y = 0;
       }
-
-      this.player.updateHitBox();
 
       this.player.centercamera(this.camera);
 

@@ -10,9 +10,8 @@ const normalHeight = 16;
 const slideWidth = 10;
 const slideHeight = 12;
 
-export class Player implements Renderable {
+export class Player implements Object {
   name : string;
-  onGround: boolean = true;
   velocity: Vector2 = { x: 0, y: 0 };
   position: Vector2;
   level: Level;
@@ -21,7 +20,10 @@ export class Player implements Renderable {
   ground?: Platform;
 
   hitbox: HitBox;
-  
+
+  width: number = normalHeight;
+  height: number = normalWidth;
+
   constructor (name: string, level: Level) {
     this.name = name;
     this.level = level;
@@ -31,38 +33,24 @@ export class Player implements Renderable {
     this.hitbox = new HitBox(this.position, normalWidth, normalHeight);
   }
 
-  updateHitBox () {
-    if (!this.ground) {
-      this.hitbox = this.sliding
-        ? new HitBox(this.position, slideWidth, slideHeight)
-        : new HitBox(this.position, normalWidth, normalHeight);
+  updatePosition () {
+    if (this.ground) {
+      this.position = {x: this.position.x, y: this.ground.position.y - (this.sliding ? slideHeight : normalHeight)};
     }
-    else {
-      this.hitbox = this.sliding
-        ? new HitBox({ x: this.position.x, y: this.ground.position.y - slideHeight }, slideWidth, slideHeight)
-        : new HitBox({ x: this.position.x, y: this.ground.position.y - normalHeight }, normalWidth, normalHeight);
-    }
+    this.width = normalWidth;
+    this.height = this.sliding ? slideHeight : normalHeight;
+
+    this.hitbox = new HitBox(this.position, this.width, this.height);
   }
 
-  checkIfOnGround () {
+  getGround () : Platform | undefined {
     const downhitbox = new HitBox({ x: this.position.x, y: this.position.y + .1 }, this.hitbox.width, this.hitbox.height);
 
     for (let platform of this.level.platforms) {
-      if (downhitbox.corners.ll.y < platform.centerpos.y) continue;
       if (downhitbox.overlaps(platform)) {
-        this.ground = platform;
-        if (this.velocity.x < -.5) {
-          this.velocity.x -= this.velocity.y
-        }
-        else if (this.velocity.x > .5) {
-          this.velocity.x += this.velocity.y
-        }
-        return true;
+        return platform;
       };
     }
-
-    this.ground = undefined;
-    return false;
   }
 
   centercamera (camera: Camera) {
@@ -71,9 +59,6 @@ export class Player implements Renderable {
 
   render (ctx: OffscreenCanvasRenderingContext2D, camera: Camera) {
     this.hitbox.render(ctx, camera);
-
-    ctx.fillStyle = "blue";
-    ctx.fillRect(this.position.x - camera.center.x + camera.width / 2, this.position.y - camera.center.y + camera.height / 2, this.hitbox.width, this.hitbox.height);
   }
 
   move (directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
@@ -85,12 +70,10 @@ export class Player implements Renderable {
     else {
       this.sliding = false;
     }
-    if (up && this.onGround) {
-      console.log('Jumping');
-      
+    if (up && this.ground) {
       // Jump
       this.velocity.y = -3;
-      this.onGround = false;
+      this.ground = undefined;
     }
 
     if (!up) {
@@ -98,7 +81,7 @@ export class Player implements Renderable {
       this.velocity.y = Math.max(this.velocity.y, 0);
     }
 
-    if (this.onGround && !this.sliding) {
+    if (!this.sliding) {
       if (left && this.velocity.x > -2) this.velocity.x = this.velocity.x - 1;
       if (right && this.velocity.x < 2) this.velocity.x = this.velocity.x + 1;
     }
@@ -106,7 +89,8 @@ export class Player implements Renderable {
   }
 
   gravitate () {
-    if (!this.onGround) {
+    if (!this.ground) {
+      
       this.velocity.y += this.level.gravity;
       if (this.velocity.y > 4) this.velocity.y = 4;
     }

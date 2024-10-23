@@ -2,7 +2,7 @@ import type { Camera } from "./camera";
 import type { Renderable } from "./renderable";
 import type { Vector2 } from "./vector2";
 
-export class HitBox implements Renderable {
+export class HitBox implements Object {
   position: Vector2;
   width: number;
   height: number;
