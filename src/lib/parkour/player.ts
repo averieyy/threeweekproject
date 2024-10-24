@@ -58,7 +58,7 @@ export class Player implements Renderable {
     return lowerplatforms[0];
   }
 
-  adjustForGround(directionkeys: {left: boolean, right: boolean}) {
+  adjustForGround(directionkeys: { left: boolean, right: boolean }) {
     if (this.ground && this.velocity.y > 0.5) {
       if (directionkeys.left && !directionkeys.right) this.velocity.x = -this.velocity.y
       if (directionkeys.right && !directionkeys.left) this.velocity.x = this.velocity.y
@@ -67,7 +67,7 @@ export class Player implements Renderable {
 
     if (this.ground) {
       this.velocity.y = 0;
-      this.position.y = this.ground.position.y - this.height;
+      // this.position.y = this.ground.position.y - this.height;
     }
 
     this.updatePosition();
@@ -78,24 +78,24 @@ export class Player implements Renderable {
       let sides = { up: false, down: false, left: false, right: false };
 
       if (p.corners.ll.y > this.position.y && this.position.y > p.position.y) sides.down = true;
-      if (p.position.y < this.position.y && this.position.y < p.corners.ll.y) sides.up = true;
-      if (p.corners.ll.x > this.position.x && this.position.x > p.position.x) sides.left = true;
-      if (p.position.x < this.position.x && this.position.x < p.corners.ll.x) sides.right = true;
+      if (p.position.y < this.hitbox.corners.ll.y && p.corners.ll.y > this.hitbox.corners.ll.y) sides.up = true;
+      if (p.corners.lr.x > this.position.x && this.position.x > p.position.x) sides.right = true;
+      if (p.position.x < this.hitbox.corners.lr.x && p.corners.lr.x > this.hitbox.corners.lr.x) sides.left = true;
       
-      const ydiff = Math.max(p.corners.ll.y - this.position.y, this.hitbox.corners.ll.y - p.position.y);
-      const xdiff = Math.max(p.corners.ll.x - this.position.x, this.hitbox.corners.lr.x - p.position.x);
+      const ydiff = Math.min(p.corners.ll.y - this.position.y, this.hitbox.corners.ll.y - p.position.y);
+      const xdiff = Math.min(p.corners.lr.x - this.position.x, this.hitbox.corners.lr.x - p.position.x);
       
       if (xdiff < ydiff) {
         if (sides.right)
-          this.position.x = p.corners.lr.x - this.hitbox.width;
+          this.position.x = p.corners.lr.x;
         if (sides.left)
-          this.position.x = p.corners.ll.x;
+          this.position.x = p.position.x - this.hitbox.width;
       }
       else {
-        if (sides.up)
-          this.position.y = this.position.y = p.position.y - this.hitbox.height;
         if (sides.down)
           this.position.y = p.corners.ll.y;
+        if (sides.up)
+          this.position.y = p.position.y - this.hitbox.height;
       }
     }
   }

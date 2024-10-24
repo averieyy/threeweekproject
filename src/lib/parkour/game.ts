@@ -95,12 +95,18 @@ export class Game {
       this.player.position.x += this.player.velocity.x;
       this.player.position.y += this.player.velocity.y;
 
-      console.log(!!this.player.ground);
-
       this.player.updatePosition();
 
       this.player.gravitate();
       this.player.doFriction();
+
+      // For testing
+      // if (this.directions.up) this.player.position.y --;
+      // if (this.directions.down) this.player.position.y ++;
+      // if (this.directions.left) this.player.position.x --;
+      // if (this.directions.right) this.player.position.x ++;
+
+      this.player.updatePosition()
 
       const overlapping = this.player.getOverlapping();
 
