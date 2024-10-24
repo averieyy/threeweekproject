@@ -10,7 +10,7 @@ const normalHeight = 16;
 const slideWidth = 10;
 const slideHeight = 12;
 
-export class Player implements Object {
+export class Player implements Renderable {
   name : string;
   velocity: Vector2 = { x: 0, y: 0 };
   position: Vector2;
@@ -50,7 +50,12 @@ export class Player implements Object {
   getGround (overlapping: Platform[]) : Platform | undefined {
     const lowerplatforms = overlapping.filter(p => p.corners.ul.y <= this.hitbox.corners.ll.y && p.corners.ll.y > this.hitbox.corners.ll.y );
 
-    if (lowerplatforms.length == 1) return lowerplatforms[0];
+    if (lowerplatforms.length < 1) {
+      let straightBeneath = lowerplatforms.filter(p => p.corners.ll.x < this.hitbox.centerpos.x && p.corners.ll.x < this.hitbox.centerpos.x);
+      if (straightBeneath.length == 1) return straightBeneath[0];
+      else return lowerplatforms.sort((a,b) => b.position.y - a.position.y)[0];
+    };
+    return lowerplatforms[0];
   }
 
   adjustForGround(directionkeys: {left: boolean, right: boolean}) {
@@ -66,6 +71,33 @@ export class Player implements Object {
     }
 
     this.updatePosition();
+  }
+
+  collide(overlapping: Platform[]) {    
+    for (let p of overlapping) {
+      let sides = { up: false, down: false, left: false, right: false };
+
+      if (p.corners.ll.y > this.position.y && this.position.y > p.position.y) sides.down = true;
+      if (p.position.y < this.position.y && this.position.y < p.corners.ll.y) sides.up = true;
+      if (p.corners.ll.x > this.position.x && this.position.x > p.position.x) sides.left = true;
+      if (p.position.x < this.position.x && this.position.x < p.corners.ll.x) sides.right = true;
+      
+      const ydiff = Math.max(p.corners.ll.y - this.position.y, this.hitbox.corners.ll.y - p.position.y);
+      const xdiff = Math.max(p.corners.ll.x - this.position.x, this.hitbox.corners.lr.x - p.position.x);
+      
+      if (xdiff < ydiff) {
+        if (sides.right)
+          this.position.x = p.corners.lr.x - this.hitbox.width;
+        if (sides.left)
+          this.position.x = p.corners.ll.x;
+      }
+      else {
+        if (sides.up)
+          this.position.y = this.position.y = p.position.y - this.hitbox.height;
+        if (sides.down)
+          this.position.y = p.corners.ll.y;
+      }
+    }
   }
 
   centercamera (camera: Camera) {
