@@ -136,8 +136,9 @@ export class Player implements Renderable {
   }
 
   gravitate () {
-    this.velocity.y += this.level.gravity;
-    if (this.velocity.y > 4) this.velocity.y = 4;
+    this.velocity.y += this.level.gravity * (this.sliding ? 1.5 : 1);
+    if (this.sliding && this.velocity.y > 5) this.velocity.y = 5;
+    else if (this.velocity.y > 4) this.velocity.y = 4;
   }
 
   doFriction () {
