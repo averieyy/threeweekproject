@@ -2,7 +2,7 @@ import type { Camera } from "./camera";
 import type { Renderable } from "./renderable";
 import type { Vector2 } from "./vector2";
 
-export class HitBox implements Object {
+export class HitBox implements Renderable {
   position: Vector2;
   width: number;
   height: number;
@@ -25,7 +25,7 @@ export class HitBox implements Object {
       lr: { x: position.x + w, y: position.y + h },
     }
 
-    this.centerpos = { x: this.position.x - this.width / 2, y: this.position.y - this.height / 2 }
+    this.centerpos = { x: this.position.x + this.width / 2, y: this.position.y + this.height / 2 }
   }
 
   overlaps(h: HitBox) : boolean {

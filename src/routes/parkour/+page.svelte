@@ -12,6 +12,10 @@
 
 </script>
 
+<svelte:head>
+  <title>Parkour</title>
+</svelte:head>
+
 <main>
   <canvas bind:this={canvas} />
 </main>

@@ -43,14 +43,29 @@ export class Player implements Object {
     this.hitbox = new HitBox(this.position, this.width, this.height);
   }
 
-  getGround () : Platform | undefined {
-    const downhitbox = new HitBox({ x: this.position.x, y: this.position.y + .1 }, this.hitbox.width, this.hitbox.height);
+  getOverlapping () : Platform[] {
+    return this.level.platforms.filter(p => this.hitbox.overlaps(p));
+  }
 
-    for (let platform of this.level.platforms) {
-      if (downhitbox.overlaps(platform)) {
-        return platform;
-      };
+  getGround (overlapping: Platform[]) : Platform | undefined {
+    const lowerplatforms = overlapping.filter(p => p.corners.ul.y <= this.hitbox.corners.ll.y && p.corners.ll.y > this.hitbox.corners.ll.y );
+
+    if (lowerplatforms.length == 1) return lowerplatforms[0];
+  }
+
+  adjustForGround(directionkeys: {left: boolean, right: boolean}) {
+    if (this.ground && this.velocity.y > 0.5) {
+      if (directionkeys.left && !directionkeys.right) this.velocity.x = -this.velocity.y
+      if (directionkeys.right && !directionkeys.left) this.velocity.x = this.velocity.y
+      this.velocity.y = 0;
     }
+
+    if (this.ground) {
+      this.velocity.y = 0;
+      this.position.y = this.ground.position.y - this.height;
+    }
+
+    this.updatePosition();
   }
 
   centercamera (camera: Camera) {
@@ -89,19 +104,19 @@ export class Player implements Object {
   }
 
   gravitate () {
-    if (!this.ground) {
-      
-      this.velocity.y += this.level.gravity;
-      if (this.velocity.y > 4) this.velocity.y = 4;
-    }
+    this.velocity.y += this.level.gravity;
+    if (this.velocity.y > 4) this.velocity.y = 4;
   }
 
   doFriction () {
     if (!this.sliding && this.ground) {
       this.velocity.x *= 1 - this.ground.friction;
     }
-    if (this.sliding) {
-      this.velocity.x;
+    else if (!this.ground) {
+      this.velocity.x *= .8;
+    }
+    else {
+      this.velocity.x *= .99;
     }
   }
 }

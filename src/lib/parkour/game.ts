@@ -97,17 +97,16 @@ export class Game {
 
       console.log(!!this.player.ground);
 
+      this.player.updatePosition();
+
       this.player.gravitate();
       this.player.doFriction();
 
-      const ground = this.player.getGround();
-      this.player.ground = ground;
+      const overlapping = this.player.getOverlapping();
 
-      this.player.updatePosition();
-      
-      if (this.player.ground && this.player.velocity.y !== 0) {
-        this.player.velocity.y = 0;
-      }
+      this.player.ground = this.player.getGround(overlapping);
+
+      this.player.adjustForGround(this.directions);
 
       this.player.centercamera(this.camera);
 
