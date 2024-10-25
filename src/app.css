@@ -8,7 +8,15 @@
   --fg2: #e5e9f0;
   --fg3: #d8dee9;
 
+  --emphasis: #81a1c1;
+  --emphasis-dark: #5e81ac;
+
   --monospace: 'Jetbrains Mono', monospace;
+  --sans: 'Noto Sans', sans-serif;
+}
+
+* {
+  font-family: var(--sans);
 }
 
 body, html, main {

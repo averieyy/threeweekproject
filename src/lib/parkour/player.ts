@@ -47,22 +47,19 @@ export class Player implements Renderable {
     return this.level.platforms.filter(p => this.hitbox.overlaps(p));
   }
 
-  getGround (overlapping: Platform[]) : Platform | undefined {
-    const lowerplatforms = overlapping.filter(p => p.corners.ul.y <= this.hitbox.corners.ll.y && p.corners.ll.y > this.hitbox.corners.ll.y );
-
-    if (lowerplatforms.length < 1) {
-      let straightBeneath = lowerplatforms.filter(p => p.corners.ll.x < this.hitbox.centerpos.x && p.corners.ll.x < this.hitbox.centerpos.x);
+  getGround (possibleGround: Platform[]) : Platform | undefined {
+    if (possibleGround.length < 1) {
+      let straightBeneath = possibleGround.filter(p => p.corners.ll.x < this.hitbox.centerpos.x && p.corners.ll.x < this.hitbox.centerpos.x);
       if (straightBeneath.length == 1) return straightBeneath[0];
-      else return lowerplatforms.sort((a,b) => b.position.y - a.position.y)[0];
+      else return possibleGround.sort((a,b) => b.position.y - a.position.y)[0];
     };
-    return lowerplatforms[0];
+    return possibleGround[0];
   }
 
   adjustForGround(directionkeys: { left: boolean, right: boolean }) {
-    if (this.ground && this.velocity.y > 0.5) {
-      if (directionkeys.left && !directionkeys.right) this.velocity.x = -this.velocity.y
-      if (directionkeys.right && !directionkeys.left) this.velocity.x = this.velocity.y
-      this.velocity.y = 0;
+    if (this.ground && this.velocity.y > 1) {
+      if (directionkeys.left && !directionkeys.right) this.velocity.x -= this.velocity.y;
+      if (directionkeys.right && !directionkeys.left) this.velocity.x += this.velocity.y;
     }
 
     if (this.ground) {
@@ -73,14 +70,16 @@ export class Player implements Renderable {
     this.updatePosition();
   }
 
-  collide(overlapping: Platform[]) {    
+  collide(overlapping: Platform[]) {
+    let possiblegrounds = [];
+    
     for (let p of overlapping) {
       let sides = { up: false, down: false, left: false, right: false };
 
-      if (p.corners.ll.y > this.position.y && this.position.y > p.position.y) sides.down = true;
-      if (p.position.y < this.hitbox.corners.ll.y && p.corners.ll.y > this.hitbox.corners.ll.y) sides.up = true;
-      if (p.corners.lr.x > this.position.x && this.position.x > p.position.x) sides.right = true;
-      if (p.position.x < this.hitbox.corners.lr.x && p.corners.lr.x > this.hitbox.corners.lr.x) sides.left = true;
+      if (p.corners.ll.y >= this.position.y && this.position.y >= p.position.y) sides.down = true;
+      if (p.position.y <= this.hitbox.corners.ll.y && p.corners.ll.y >= this.hitbox.corners.ll.y) sides.up = true;
+      if (p.corners.lr.x >= this.position.x && this.position.x >= p.position.x) sides.right = true;
+      if (p.position.x <= this.hitbox.corners.lr.x && p.corners.lr.x >= this.hitbox.corners.lr.x) sides.left = true;
       
       const ydiff = Math.min(p.corners.ll.y - this.position.y, this.hitbox.corners.ll.y - p.position.y);
       const xdiff = Math.min(p.corners.lr.x - this.position.x, this.hitbox.corners.lr.x - p.position.x);
@@ -92,12 +91,17 @@ export class Player implements Renderable {
           this.position.x = p.position.x - this.hitbox.width;
       }
       else {
-        if (sides.down)
+        if (sides.down) {
           this.position.y = p.corners.ll.y;
-        if (sides.up)
+          this.velocity.y = Math.max(0, this.velocity.y);
+        }
+        if (sides.up) {
           this.position.y = p.position.y - this.hitbox.height;
+          possiblegrounds.push(p);
+        }
       }
     }
+    this.ground = this.getGround(possiblegrounds);
   }
 
   centercamera (camera: Camera) {
@@ -129,8 +133,8 @@ export class Player implements Renderable {
     }
 
     if (!this.sliding) {
-      if (left && this.velocity.x > -2) this.velocity.x = this.velocity.x - 1;
-      if (right && this.velocity.x < 2) this.velocity.x = this.velocity.x + 1;
+      if (left && this.velocity.x > -1.5) this.velocity.x = this.velocity.x - 1;
+      if (right && this.velocity.x < 1.5) this.velocity.x = this.velocity.x + 1;
     }
 
   }
@@ -142,14 +146,13 @@ export class Player implements Renderable {
   }
 
   doFriction () {
+    console.log(!!this.ground);
+    
     if (!this.sliding && this.ground) {
       this.velocity.x *= 1 - this.ground.friction;
     }
-    else if (!this.ground) {
-      this.velocity.x *= .8;
-    }
     else {
-      this.velocity.x *= .99;
+      this.velocity.x *= .98;
     }
   }
 }

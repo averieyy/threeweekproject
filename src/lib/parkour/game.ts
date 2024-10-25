@@ -110,10 +110,8 @@ export class Game {
 
       const overlapping = this.player.getOverlapping();
 
-      this.player.ground = this.player.getGround(overlapping);
-
-      this.player.adjustForGround(this.directions);
       this.player.collide(overlapping);
+      this.player.adjustForGround(this.directions);
       this.player.updatePosition();
 
       this.player.centercamera(this.camera);

@@ -1,9 +1,13 @@
 <script lang="ts">
-  let email: string;
-  let password: string;
-  let username: string;
+  import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
+  import Loginform from "$lib/components/loginform.svelte";
 
-  function submit () {
+  let errorMessage = '';
+
+  const redirectURL = $page.url.searchParams.get('redirect');
+
+  function submit (username: string, email:string, password:string) {
     fetch('/api/login', {
       method: 'POST',
       body: JSON.stringify({
@@ -12,19 +16,18 @@
         username
       })
     }).then(resp => {
-      
+      if (resp.ok) {
+        if (redirectURL) {
+          goto('/login/2fa?redirect='+redirectURL);
+        }
+        else goto('/login/2fa');
+      }
     });
   }
 </script>
 
 <main>
-  <form on:submit={submit}>
-    <h2>Log in</h2>
-    <input bind:value={username} type="text" placeholder="Username">
-    <input bind:value={email} type="email" placeholder="Email">
-    <input bind:value={password} type="password" placeholder="Password">
-    <input type="submit" value="Log in">
-  </form>
+  <Loginform submit={submit} title="Log in" errorMessage={errorMessage} />
 </main>
 
 <style>
@@ -32,20 +35,5 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--bg2);
-    gap: .5rem;
-    padding: .5rem;
-  }
-
-  input {
-    background-color: var(--bg3);
-    color: var(--fg1);
-    border: none;
-    padding: .5rem;
   }
 </style>
