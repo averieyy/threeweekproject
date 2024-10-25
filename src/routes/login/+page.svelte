@@ -15,12 +15,18 @@
         password,
         username
       })
-    }).then(resp => {
+    }).then(async resp => {
       if (resp.ok) {
         if (redirectURL) {
           goto('/login/2fa?redirect='+redirectURL);
         }
         else goto('/login/2fa');
+      }
+      else {
+        if (resp.status == 400) {
+          errorMessage = (await resp.json()).message || 'An error occured while trying to sign in.';
+        }
+        else errorMessage = 'An error occured while trying to sign in';
       }
     });
   }
@@ -28,6 +34,7 @@
 
 <main>
   <Loginform submit={submit} title="Log in" errorMessage={errorMessage} />
+  <a href={'/signin' + redirectURL && `redirect=${redirectURL}`}>Don't have an account? Sign up</a>
 </main>
 
 <style>
@@ -35,5 +42,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    gap: .25rem;
+  }
+  a {
+    color: var(--fg3);
+    font-size: 75%;
+    font-style: italic;
   }
 </style>

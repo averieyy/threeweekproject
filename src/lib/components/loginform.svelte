@@ -22,10 +22,14 @@ let password : string;
   <input bind:value={username} type="text" placeholder="Username">
   <input bind:value={email} type="email" placeholder="Email">
   <input bind:value={password} type="password" placeholder="Password">
-  <input type="submit" value="Log in">
+  <input type="submit" value={title}>
 </form>
 
 <style>
+  h2 {
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+  }
   form {
     display: flex;
     flex-direction: column;
