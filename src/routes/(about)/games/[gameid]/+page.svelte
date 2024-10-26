@@ -6,13 +6,10 @@
 </script>
 
 <main>
-  <div class="linkback">
-    <a href="/"><Icon icon="arrow_back" /><span>Go back</span></a>
-  </div>
   <div class="name">
     <h2>{data.name}</h2>
     {#if data.loggedin}
-      <a href={data.url} class="playbtn"><Icon icon="play_arrow" /></a>
+      <a href={data.url} class="playbtn" title="Play"><Icon icon="play_arrow" /></a>
     {:else}
       <a href={"/login?redirect=" + data.url} class="playbtn">Log in to play!</a>
     {/if}
@@ -62,8 +59,6 @@
     margin: 0;
     
     padding: .25rem;
-    padding-left: .5rem;
-    border-left: .25rem solid var(--emphasis);
   }
   .playbtn {
     background-color: var(--bg2);

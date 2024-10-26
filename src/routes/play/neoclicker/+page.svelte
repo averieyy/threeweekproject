@@ -50,6 +50,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Neoclicker</title>
+</svelte:head>
+
 <h2>Neoclicker</h2>
 
 <span>{displayPoints} {pps}</span>

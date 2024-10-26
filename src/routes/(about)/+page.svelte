@@ -6,13 +6,14 @@
 
 <main>
   <div class="maincolumn">
-    <h2>Games</h2>
-    <div class="games">
-      {#each games as game}
-        <a href={`/games/${game.id}`} class="gametile">
-          <span>{game.name}</span>
-        </a>
-      {/each}
+    <div class="gameparent">
+      <div class="games">
+        {#each games as game}
+          <a href={`/games/${game.id}`} class="gametile">
+            <span>{game.name}</span>
+          </a>
+        {/each}
+      </div>
     </div>
   </div>
 </main>
@@ -21,24 +22,24 @@
   main {
     display: flex;
     flex-direction: column;
-    align-items: center;
   }
   .maincolumn {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    max-width: 500px;
-    width: 100%;
     padding: 1rem;
   }
-  h2 {
-    text-align: center;
-    margin: 0;
+  .gameparent {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
   }
   .games {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: .5rem;
+    max-width: 500px;
+    flex: 1;
   }
   .gametile {
     background-color: var(--bg2);

@@ -13,6 +13,10 @@ onMount(() => {
 
 </script>
 
+<svelte:head>
+  <title>Snake</title>
+</svelte:head>
+
 <main>
   <canvas bind:this={canvas} />
 </main>

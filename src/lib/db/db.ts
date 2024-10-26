@@ -13,9 +13,9 @@ interface dataBaseStructure {
 }
 
 const defaultDatabase: dataBaseStructure = { users: [], leaderboard: [], games: [
-  {id: 0, name: 'Parkour', plays: 0, url: '/play/parkour'},
-  {id: 1, name: 'Snake', plays: 0, url: '/play/snake'},
-  {id: 2, name: 'Neoclicker', plays: 0, url: '/play/neoclicker'},
+  {id: 0, name: 'Parkour', plays: 0, url: '/play/parkour', colour: '#bf616a'},
+  {id: 1, name: 'Snake', plays: 0, url: '/play/snake', colour: '#b48ead'},
+  {id: 2, name: 'Neoclicker', plays: 0, url: '/play/neoclicker', colour: '#5e81ac'},
 ], tokens: [] };
 
 export async function getDatabase() : Promise<Low<dataBaseStructure>> {

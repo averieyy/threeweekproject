@@ -3,4 +3,5 @@ export interface Game {
   id: number;
   url: string;
   plays: number;
+  colour: string;
 }
