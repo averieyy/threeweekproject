@@ -10,46 +10,51 @@
 </script>
 
 <main>
-  <div class="outergraph">
-    <div class="graph">
-      <div class="games">
-        {#each games as game}
-          <span style:border-color={game.colour} class="game">
-            {game.name}
-          </span>
-        {/each}
-      </div>
-      <figure>
-        {@html svgContent}
-      </figure>
-    </div>
-  </div>
-  <div class="leaderboards">
-    {#each games as game}
-      <div class="gamesection">
-        <div class="toggleopen">
-          <input type="checkbox" id={game.id}><label for={game.id}><div class="icon"><Icon icon='chevron_right'/></div>{game.name}</label>
+  <div class="outerarticle">
+    <div class="article">
+      <div class="graph">
+        <div class="games">
+          {#each games as game}
+            <span style:border-color={game.colour} class="game">
+              {game.name}
+            </span>
+          {/each}
         </div>
-        <div class="leaderboard">
-          <div class="innerleaderboard">
-            <div class="entryheader">
-              <span>Player</span>
-              <span>Points</span>
-            </div>
-            {#each leaderboard.filter(l => l.gameid == game.id) as entry}
-              <div class="leaderboardentry">
-                <span>
-                  {entry.user}
-                </span>
-                <span>
-                  {entry.points}
-                </span>
+        <figure>
+          {@html svgContent}
+        </figure>
+      </div>
+      <section>
+        <h2>Leaderboards</h2>
+        <div class="leaderboards">
+          {#each games as game}
+            <div class="gamesection">
+              <div class="toggleopen">
+                <input type="checkbox" id={game.id}><label for={game.id}><div class="icon"><Icon icon='chevron_right'/></div>{game.name}</label>
               </div>
-            {/each}
-          </div>
+              <div class="leaderboard">
+                <div class="innerleaderboard">
+                  <div class="entryheader">
+                    <span>Player</span>
+                    <span>Points</span>
+                  </div>
+                  {#each leaderboard.filter(l => l.gameid == game.id) as entry}
+                    <div class="leaderboardentry">
+                      <span>
+                        {entry.user}
+                      </span>
+                      <span>
+                        {entry.points}
+                      </span>
+                    </div>
+                  {/each}
+                </div>
+              </div>
+            </div>
+          {/each}
         </div>
-      </div>
-    {/each}
+      </section>
+    </div>
   </div>
 </main>
 
@@ -58,15 +63,20 @@
     display: flex;
     flex-direction: column;
     padding: .75rem;
-    gap: .75rem;
   }
-  .outergraph {
+  .outerarticle {
     display: flex;
     flex-direction: row;
     justify-content: center;
   }
-  .graph {
+  .article {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
     width: 100%;
+    gap: .75rem;
+  }
+  .graph {
     display: flex;
     flex-direction: row;
     background-color: var(--bg2);
@@ -168,5 +178,16 @@
     justify-content: center;
     align-items: center;
     background-color: var(--bg1);
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+  }
+
+  section h2 {
+    margin: 0;
+    border-bottom: .2rem solid var(--emphasis);
   }
 </style>
