@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+  import { onMount } from "svelte";
 
   let points = 0;
   let displayPoints : string;
@@ -39,10 +39,16 @@
     points += upgrade.bonus;
   }
 
+  function updateLeaderboards() {
+    fetch('/api/leaderboard', { method: 'POST', body: JSON.stringify({ gameid: 2, points: points.toFixed(1) }) });
+  }
+
   onMount(() => {
     setInterval(() => {
       points += (pps / 60);
     }, timing);
+
+    setInterval(updateLeaderboards, 60000); // Update leaderboard entry every 60 seconds
   });
 
   $: {

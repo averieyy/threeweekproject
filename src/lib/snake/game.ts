@@ -39,6 +39,14 @@ export class Game {
     this.buffercanvas.height = this.board.size;
   }
 
+  restart () {
+    this.size = 6;
+    this.score = 0;
+    this.board = new Board(this.size);
+    this.resize();
+    this.mainloop();
+  }
+
   keybind () {
     document.addEventListener('keydown', (ev) => {
       switch(ev.key) {
@@ -71,6 +79,11 @@ export class Game {
 
   die() {
     clearInterval(this.maininterval);
+
+    // Update leaderboards
+    fetch('/api/leaderboard', { method: 'POST', body: JSON.stringify({ gameid: 1, points: this.score }) })
+  
+    this.restart();
   }
 
   tick() {
