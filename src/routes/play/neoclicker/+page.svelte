@@ -5,6 +5,8 @@
   let displayPoints : string;
   let pps = 0;
 
+  let score = 0;
+
   let timing = 1000/60;
 
   interface upgrade {
@@ -40,12 +42,14 @@
   }
 
   function updateLeaderboards() {
-    fetch('/api/leaderboard', { method: 'POST', body: JSON.stringify({ gameid: 2, points: points.toFixed(1) }) });
+    fetch('/api/leaderboard', { method: 'POST', body: JSON.stringify({ gameid: 2, points: Math.round(score) }) });
   }
 
   onMount(() => {
     setInterval(() => {
-      points += (pps / 60);
+      const tickpoints = (pps / 60);
+      points += tickpoints;
+      score += tickpoints;
     }, timing);
 
     setInterval(updateLeaderboards, 60000); // Update leaderboard entry every 60 seconds

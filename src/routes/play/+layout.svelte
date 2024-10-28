@@ -3,10 +3,21 @@
 
 </script>
 
-<a href="/"><Icon icon='arrow_back'/> Go back</a>
-<slot />
+<div class="everything">
+  <a href="/"><Icon icon='arrow_back'/> Go back</a>
+  <main>
+    <slot />
+  </main>
+</div>
 
 <style>
+  .everything {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+  }
   a {
     color: var(--fg1);
     text-decoration: none;
@@ -18,5 +29,12 @@
     margin: .25rem;
     gap: .5rem;
     padding: .5rem;
+  }
+  main {
+    flex: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>

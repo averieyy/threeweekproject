@@ -22,9 +22,6 @@ onMount(() => {
 </main>
 
 <style>
-  main {
-    display: flex;
-  }
   canvas {
     width: 100%;
     height: 100%;

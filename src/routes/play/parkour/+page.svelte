@@ -16,19 +16,9 @@
   <title>Parkour</title>
 </svelte:head>
 
-<main>
-  <canvas bind:this={canvas} />
-</main>
+<canvas bind:this={canvas} />
 
 <style>
-  main {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-  }
 
   canvas {
     image-rendering: pixelated;
