@@ -1,6 +1,8 @@
 import { Platform } from "./platform";
 import type { Vector2 } from "./vector2";
 
+import level0 from '$lib/levels/0.json';
+
 export class Level {
   static levels: Level[] = [new Level('testlevel', [new Platform({ x: -20, y: 20 }, 100, 10, .5), new Platform({ x: -100, y: 10 }, 80, 10, .5), new Platform({ x: 20, y: 10 }, 100, 10), new Platform({ x: -20, y: -20 }, 100, 10, .5), new Platform({ x: -100, y: -25 }, 100, 10, 0)], { x: 0, y: 0 })];
   
@@ -16,4 +18,12 @@ export class Level {
     this.platforms = platforms;
     this.startPos = startPos;
   }
+
+  static fromJSON (json: {name: string, platforms: {height: number, width: number, pos: number[]}[], startpos: number[]}) : Level {
+    return new Level(json.name, json.platforms.map(p => new Platform({x: p.pos[0], y: p.pos[1]}, p.width, p.height)), {x: json.startpos[0], y: json.startpos[1]});
+  }
 }
+
+Level.levels = [
+  Level.fromJSON(level0)
+]

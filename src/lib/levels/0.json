@@ -1,0 +1,82 @@
+{
+  "name": "asdf",
+  "platforms": [
+    {
+      "pos": [-48,-256],
+      "width": 16,
+      "height": 288
+    },
+    {
+      "pos": [-32,16],
+      "width": 64,
+      "height": 16
+    },
+    {
+      "pos": [32,24],
+      "width": 64,
+      "height": 8
+    },
+    {
+      "pos": [116, 24],
+      "width": 16,
+      "height": 8
+    },
+    {
+      "pos": [152, 24],
+      "width": 16,
+      "height": 8
+    },
+    {
+      "pos": [184, 24],
+      "width": 16,
+      "height": 8
+    },
+    {
+      "pos": [216, 24],
+      "width": 16,
+      "height": 8
+    },
+    {
+      "pos": [248, 24],
+      "width": 64,
+      "height": 8
+    },
+    {
+      "pos": [248, 24],
+      "width": 64,
+      "height": 8
+    },
+    {
+      "pos": [312, 16],
+      "width": 8,
+      "height": 8
+    },
+    {
+      "pos": [320, 8],
+      "width": 8,
+      "height": 8
+    },
+    {
+      "pos": [328, 0],
+      "width": 8,
+      "height": 8
+    },
+    {
+      "pos": [336, -8],
+      "width": 8,
+      "height": 8
+    },
+    {
+      "pos": [344, -16],
+      "width": 8,
+      "height": 8
+    },
+    {
+      "pos": [352, -24],
+      "width": 8,
+      "height": 8
+    }
+  ],
+  "gravity": 0.175,
+  "startpos": [0, 0]
+}
