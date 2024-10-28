@@ -1,4 +1,4 @@
-import { running } from "./assets";
+import { crouching, running } from "./assets";
 import { Camera } from "./camera";
 import { HitBox } from "./hitbox";
 import type { Level } from "./level";
@@ -114,7 +114,9 @@ export class Player implements Renderable {
   }
 
   render (ctx: OffscreenCanvasRenderingContext2D, camera: Camera) {
-    const image = running[0 + Math.floor(this.animationframe) + this.direction * 8]
+    const image = this.sliding
+      ? crouching[0 + this.direction]
+      : running[0 + Math.floor(this.animationframe) + this.direction * 8]
     if (!image) return;
     ctx.putImageData(image, Math.floor(this.position.x - camera.center.x + camera.width / 2), Math.floor(this.position.y - camera.center.y + camera.height / 2));
     // this.hitbox.render(ctx, camera);

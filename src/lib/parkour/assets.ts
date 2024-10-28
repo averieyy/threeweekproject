@@ -1,4 +1,5 @@
 import Running from '$lib/assets/parkour/running.png';
+import Crouching from '$lib/assets/parkour/crouching.png';
 
 function loadImages(path: string, width: number, height: number): ImageData[] {
   const image = new Image();
@@ -24,3 +25,4 @@ function loadImages(path: string, width: number, height: number): ImageData[] {
 }
 
 export const running = loadImages(Running, 10, 16);
+export const crouching = loadImages(Crouching, 10, 12);
