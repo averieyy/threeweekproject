@@ -1,3 +1,4 @@
+import { running } from "./assets";
 import { Camera } from "./camera";
 import { HitBox } from "./hitbox";
 import type { Level } from "./level";
@@ -23,6 +24,10 @@ export class Player implements Renderable {
 
   width: number = normalHeight;
   height: number = normalWidth;
+
+  // 0: right, 1: left
+  direction: number = 0;
+  animationframe: number = 0;
 
   constructor (name: string, level: Level) {
     this.name = name;
@@ -109,7 +114,10 @@ export class Player implements Renderable {
   }
 
   render (ctx: OffscreenCanvasRenderingContext2D, camera: Camera) {
-    this.hitbox.render(ctx, camera);
+    const image = running[0 + Math.floor(this.animationframe) + this.direction * 8]
+    if (!image) return;
+    ctx.putImageData(image, Math.floor(this.position.x - camera.center.x + camera.width / 2), Math.floor(this.position.y - camera.center.y + camera.height / 2));
+    // this.hitbox.render(ctx, camera);
   }
 
   move (directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
@@ -137,6 +145,13 @@ export class Player implements Renderable {
       if (right && this.velocity.x < 1.5) this.velocity.x = this.velocity.x + 1;
     }
 
+    if (this.velocity.x < 0) this.direction = 1;
+    if (this.velocity.x > 0) this.direction = 0;
+
+    if (Math.abs(this.velocity.x) > 0.5 && (directions.left || directions.right)) this.animationframe += Math.abs(this.velocity.x) / 10;
+    this.animationframe %= 8;
+
+    if (!(directions.left || directions.right)) this.animationframe = 0;
   }
 
   gravitate () {
