@@ -131,7 +131,7 @@ export class Player implements Renderable {
     else {
       this.sliding = false;
     }
-    if (up && this.ground) {
+    if (up && this.ground && !this.sliding) {
       // Jump
       this.velocity.y = -2.5;
       this.ground = undefined;
