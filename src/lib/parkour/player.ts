@@ -29,6 +29,8 @@ export class Player implements Renderable {
   direction: number = 0;
   animationframe: number = 0;
 
+  dead: boolean = false;
+
   constructor (name: string, level: Level) {
     this.name = name;
     this.level = level;
@@ -90,6 +92,7 @@ export class Player implements Renderable {
       const xdiff = Math.min(p.corners.lr.x - this.position.x, this.hitbox.corners.lr.x - p.position.x);
       
       if (xdiff < ydiff) {
+        if (sides.left || sides.right) this.animationframe = 0;
         if (sides.right)
           this.position.x = p.corners.lr.x;
         if (sides.left)
@@ -110,7 +113,8 @@ export class Player implements Renderable {
   }
 
   centercamera (camera: Camera) {
-    camera.move(this.hitbox);
+    if (!this.dead)
+      camera.move(this.hitbox);
   }
 
   render (ctx: OffscreenCanvasRenderingContext2D, camera: Camera) {
@@ -124,6 +128,8 @@ export class Player implements Renderable {
 
   move (directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
     const { up, down, left, right } = directions;
+
+    if (this.dead) return;
 
     if (down) {
       this.sliding = true;
@@ -154,6 +160,7 @@ export class Player implements Renderable {
     this.animationframe %= 8;
 
     if (!(directions.left || directions.right)) this.animationframe = 0;
+    if (!this.ground) this.animationframe = 2;
   }
 
   gravitate () {
@@ -175,5 +182,18 @@ export class Player implements Renderable {
     else {
       this.velocity.x *= .98;
     }
+  }
+  ressurect () {
+    this.dead = false;
+
+    // Reset everything
+    this.position = this.level.startPos;
+    this.velocity = { x: 0, y: 0 }
+
+    this.direction = 0;
+    this.ground = undefined;
+    this.sliding = false;
+
+    this.updatePosition();
   }
 }

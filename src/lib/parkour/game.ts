@@ -2,6 +2,7 @@ import { Camera } from "./camera";
 import { Level } from "./level";
 import { Platform } from "./platform";
 import { Player } from "./player";
+import { deadsplash } from "./splash";
 
 export class Game {
   static readonly FPS = 60;
@@ -44,6 +45,11 @@ export class Game {
 
   keybinds () {
     document.addEventListener('keydown', (ev) => {
+      if (this.player.dead) {
+        this.player.ressurect();
+        return;
+      }
+
       switch(ev.key) {
         case ' ':
         case 'ArrowUp': this.directions.up = true; break;
@@ -77,6 +83,7 @@ export class Game {
     
     this.player.render(this.bufferctx, this.camera);
 
+    deadsplash.render(this.bufferctx);
 
     // Switch buffers
     this.ctx.putImageData(this.bufferctx.getImageData(0, 0, this.canvaswidth, this.canvasheight), 0, 0);
@@ -118,7 +125,16 @@ export class Game {
       this.player.adjustForGround(this.directions);
       this.player.updatePosition();
 
+      if (this.player.position.y > 64) this.player.dead = true;
+      if (!this.player.dead) deadsplash.hide();
+
       this.player.centercamera(this.camera);
+
+      if (this.player.dead) {
+        if (!deadsplash.showing) deadsplash.show();
+      }
+
+      deadsplash.update();
 
       // Render
       this.resize();
