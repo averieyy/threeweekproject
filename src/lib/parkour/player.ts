@@ -62,7 +62,7 @@ export class Player implements Renderable {
   }
 
   adjustForGround(directionkeys: { left: boolean, right: boolean }) {
-    if (this.ground && this.velocity.y > 1) {
+    if (this.ground && this.velocity.y > 1 && this.sliding) {
       if (directionkeys.left && !directionkeys.right) this.velocity.x -= this.velocity.y;
       if (directionkeys.right && !directionkeys.left) this.velocity.x += this.velocity.y;
     }
@@ -133,7 +133,7 @@ export class Player implements Renderable {
     }
     if (up && this.ground) {
       // Jump
-      this.velocity.y = -3;
+      this.velocity.y = -2.5;
       this.ground = undefined;
     }
 
@@ -143,8 +143,8 @@ export class Player implements Renderable {
     }
 
     if (!this.sliding) {
-      if (left && this.velocity.x > -1.5) this.velocity.x = this.velocity.x - 1;
-      if (right && this.velocity.x < 1.5) this.velocity.x = this.velocity.x + 1;
+      if (left && this.velocity.x > -1.5) this.velocity.x = this.velocity.x - .75;
+      if (right && this.velocity.x < 1.5) this.velocity.x = this.velocity.x + .75;
     }
 
     if (this.velocity.x < 0) this.direction = 1;
@@ -167,6 +167,9 @@ export class Player implements Renderable {
     
     if (!this.sliding && this.ground) {
       this.velocity.x *= 1 - this.ground.friction;
+    }
+    else if (!this.ground) {
+      this.velocity.x *= .95
     }
     else {
       this.velocity.x *= .98;

@@ -4,7 +4,7 @@ import type { Vector2 } from "./vector2";
 import level0 from '$lib/levels/0.json';
 
 export class Level {
-  static levels: Level[] = [new Level('testlevel', [new Platform({ x: -20, y: 20 }, 100, 10, .5), new Platform({ x: -100, y: 10 }, 80, 10, .5), new Platform({ x: 20, y: 10 }, 100, 10), new Platform({ x: -20, y: -20 }, 100, 10, .5), new Platform({ x: -100, y: -25 }, 100, 10, 0)], { x: 0, y: 0 })];
+  static levels: Level[] = [];
   
   name: string;
   platforms: Platform[];

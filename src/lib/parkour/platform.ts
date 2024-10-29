@@ -21,7 +21,9 @@ export class Platform extends HitBox {
       for (let y = 0; y < this.height; y += image.height) {
 
 
-        ctx.drawImage(image, this.position.x + x - camera.center.x + camera.width / 2, this.position.y + y - camera.center.y + camera.height / 2);
+        ctx.drawImage(image,
+          Math.floor(this.position.x + x - camera.center.x + camera.width / 2),
+          Math.floor(this.position.y + y - camera.center.y + camera.height / 2));
       }
     }
   }
