@@ -70,6 +70,10 @@ export class Game {
     for (let platform of this.player.level.platforms) {
       platform.render(this.bufferctx, this.camera);
     }
+
+    for (let infoplaque of this.player.level.plaques) {
+      infoplaque.render(this.bufferctx, this.camera);
+    }
     
     this.player.render(this.bufferctx, this.camera);
 

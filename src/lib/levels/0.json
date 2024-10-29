@@ -77,6 +77,13 @@
       "height": 8
     }
   ],
+  "plaques": [
+    {
+      "id": "movement",
+      "x": -16,
+      "y": -32
+    }
+  ],
   "gravity": 0.175,
   "startpos": [0, 0]
 }

@@ -1,11 +1,13 @@
 import Running from '$lib/assets/parkour/running.png';
 import Crouching from '$lib/assets/parkour/crouching.png';
 
-function loadImages(path: string, width: number, height: number): ImageData[] {
+function loadImages(path: string, width: number, height: number): CanvasImageSource[] {
+  const outpimg = new OffscreenCanvas(width, height)
+  const imagectx = outpimg.getContext('2d');
   const image = new Image();
   image.src = path;
 
-  let returned : ImageData[] = [];
+  let returned : CanvasImageSource[] = [];
 
   image.onload = () => {
     const canv = new OffscreenCanvas(image.width, image.height);
@@ -16,7 +18,9 @@ function loadImages(path: string, width: number, height: number): ImageData[] {
     for (let x = 0; x < image.width; x += width) {
 
       for (let y = 0; y < image.height; y += height) {
-        returned.push(ctx?.getImageData(x,y,width,height));
+        const imgdata = ctx?.getImageData(x,y,width,height);
+        imagectx?.putImageData(imgdata, 0, 0);
+        returned.push(outpimg.transferToImageBitmap());
       }
     }
   }

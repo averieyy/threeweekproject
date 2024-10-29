@@ -118,7 +118,7 @@ export class Player implements Renderable {
       ? crouching[0 + this.direction]
       : running[0 + Math.floor(this.animationframe) + this.direction * 8]
     if (!image) return;
-    ctx.putImageData(image, Math.floor(this.position.x - camera.center.x + camera.width / 2), Math.floor(this.position.y - camera.center.y + camera.height / 2));
+    ctx.drawImage(image, Math.floor(this.position.x - camera.center.x + camera.width / 2), Math.floor(this.position.y - camera.center.y + camera.height / 2));
     // this.hitbox.render(ctx, camera);
   }
 
