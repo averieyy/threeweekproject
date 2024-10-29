@@ -31,10 +31,9 @@
     padding: .5rem;
   }
   main {
-    flex: 1;
 
     display: flex;
+    flex-direction: row;
     justify-content: center;
-    align-items: center;
   }
 </style>

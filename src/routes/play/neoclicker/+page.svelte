@@ -64,14 +64,16 @@
   <title>Neoclicker</title>
 </svelte:head>
 
-<h2>Neoclicker</h2>
-
-<span>{displayPoints} {pps}</span>
-
-<div class="upgrades">
-  {#each upgrades as upgrade}
-    <button on:click={() => buy(upgrade)} class={`${points >= upgrade.price ? 'available' : 'unavailable'}`}>{upgrade.name} [{upgrade.count}]</button>
-  {/each}
+<div>
+  <h2>Neoclicker</h2>
+  
+  <span>{displayPoints} {pps}</span>
+  
+  <div class="upgrades">
+    {#each upgrades as upgrade}
+      <button on:click={() => buy(upgrade)} class={`${points >= upgrade.price ? 'available' : 'unavailable'}`}>{upgrade.name} [{upgrade.count}]</button>
+    {/each}
+  </div>
 </div>
 
 
@@ -93,5 +95,10 @@
       color: var(--fg3);
       font-style: italic;
     }
+  }
+  div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 </style>
