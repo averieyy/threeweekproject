@@ -118,7 +118,7 @@ export class Player implements Renderable {
   }
 
   render (ctx: OffscreenCanvasRenderingContext2D, camera: Camera) {
-    const image = this.sliding
+    const image = this.sliding || this.dead
       ? crouching[0 + this.direction]
       : running[0 + Math.floor(this.animationframe) + this.direction * 8]
     if (!image) return;

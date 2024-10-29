@@ -1,5 +1,6 @@
 import Running from '$lib/assets/parkour/running.png';
 import Crouching from '$lib/assets/parkour/crouching.png';
+import Numbers from '$lib/assets/parkour/numbers.png';
 
 function loadImages(path: string, width: number, height: number): CanvasImageSource[] {
   const outpimg = new OffscreenCanvas(width, height)
@@ -28,5 +29,6 @@ function loadImages(path: string, width: number, height: number): CanvasImageSou
   return returned;
 }
 
+export const numbers = loadImages(Numbers, 4, 5);
 export const running = loadImages(Running, 10, 16);
 export const crouching = loadImages(Crouching, 10, 12);

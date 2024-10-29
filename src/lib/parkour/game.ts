@@ -1,8 +1,11 @@
+import { numbers } from "./assets";
 import { Camera } from "./camera";
 import { Level } from "./level";
 import { Platform } from "./platform";
 import { Player } from "./player";
 import { deadsplash } from "./splash";
+
+const numbersInNumbers = '0123456789.:';
 
 export class Game {
   static readonly FPS = 60;
@@ -16,6 +19,9 @@ export class Game {
 
   player: Player;
   camera: Camera;
+
+  starttime : number;
+  currenttime: number = 0;
 
   directions: { up: boolean, down: boolean, left: boolean, right: boolean } = {up: false, down: false, left: false, right: false };
 
@@ -40,21 +46,27 @@ export class Game {
     this.keybinds();
     this.resize();
 
+    this.starttime = Date.now();
+
     this.mainloop();
   }
 
   keybinds () {
     document.addEventListener('keydown', (ev) => {
-      if (this.player.dead) {
+      if (this.player.dead && [' ', 'Enter'].includes(ev.key)) {
         this.player.ressurect();
         return;
       }
 
       switch(ev.key) {
         case ' ':
+        case 'w':
         case 'ArrowUp': this.directions.up = true; break;
+        case 's':
         case 'ArrowDown': this.directions.down = true; break;
+        case 'a':
         case 'ArrowLeft': this.directions.left = true; break;
+        case 'd':
         case 'ArrowRight': this.directions.right = true; break;
       }
     });
@@ -62,9 +74,13 @@ export class Game {
     document.addEventListener('keyup', (ev) => {
       switch(ev.key) {
         case ' ':
+        case 'w':
         case 'ArrowUp': this.directions.up = false; break;
+        case 's':
         case 'ArrowDown': this.directions.down = false; break;
+        case 'a':
         case 'ArrowLeft': this.directions.left = false; break;
+        case 'd':
         case 'ArrowRight': this.directions.right = false; break;
       }
     });
@@ -85,6 +101,22 @@ export class Game {
 
     deadsplash.render(this.bufferctx);
 
+    // Render time
+    const hours = Math.floor(this.currenttime / 3600000);
+    const minutes = Math.floor(this.currenttime / 60000);
+
+    const hourstext = hours != 0 && hours.toString().padStart(2, '0') + ':';
+    const minutestext = minutes != 0 && minutes.toString().padStart(2, '0') + ':';
+    const secondstext = Math.floor((this.currenttime / 1000) % 60).toString().padStart(2, '0');
+    const millisecondstext = (this.currenttime % 1000).toString().padStart(3, '0');
+
+    const textTime = `${hourstext || ''}${minutestext || ''}${secondstext}.${millisecondstext}`;
+    // (this.currenttime / 1000).toFixed(1)
+
+    for (let i = 0; i < textTime.length; i++) {
+      this.bufferctx.drawImage(numbers[numbersInNumbers.indexOf(textTime[i])], 2 + i * 4, 2);
+    }
+
     // Switch buffers
     this.ctx.putImageData(this.bufferctx.getImageData(0, 0, this.canvaswidth, this.canvasheight), 0, 0);
   }
@@ -100,6 +132,7 @@ export class Game {
   mainloop () {
 
     setInterval(() => {
+      this.currenttime = Date.now() - this.starttime;
       this.player.move(this.directions);
       // Tick
 
@@ -125,7 +158,7 @@ export class Game {
       this.player.adjustForGround(this.directions);
       this.player.updatePosition();
 
-      if (this.player.position.y > 64) this.player.dead = true;
+      if (this.player.position.y > 96) this.player.dead = true;
       if (!this.player.dead) deadsplash.hide();
 
       this.player.centercamera(this.camera);
