@@ -103,10 +103,10 @@ export class Game {
 
     // Render time
     const hours = Math.floor(this.currenttime / 3600000);
-    const minutes = Math.floor(this.currenttime / 60000);
+    const minutes = Math.floor(this.currenttime / 60000) % 60;
 
     const hourstext = hours != 0 && hours.toString().padStart(2, '0') + ':';
-    const minutestext = minutes != 0 && minutes.toString().padStart(2, '0') + ':';
+    const minutestext = (hours != 0 || minutes != 0) && minutes.toString().padStart(2, '0') + ':';
     const secondstext = Math.floor((this.currenttime / 1000) % 60).toString().padStart(2, '0');
     const millisecondstext = (this.currenttime % 1000).toString().padStart(3, '0');
 
