@@ -157,7 +157,7 @@ export class Player implements Renderable {
   }
 
   gravitate () {
-    this.velocity.y += this.level.gravity * (this.sliding ? 1.5 : 1);
+    this.velocity.y += this.level.gravity * (this.sliding && Math.abs(this.velocity.x) > 1.5 ? 1.5 : 1);
     if (this.sliding && this.velocity.y > 5) this.velocity.y = 5;
     else if (this.velocity.y > 4) this.velocity.y = 4;
   }
@@ -169,7 +169,8 @@ export class Player implements Renderable {
       this.velocity.x *= 1 - this.ground.friction;
     }
     else if (!this.ground) {
-      this.velocity.x *= .95
+      if (this.sliding) this.velocity.x *= .99;
+      else this.velocity.x *= .95
     }
     else {
       this.velocity.x *= .98;

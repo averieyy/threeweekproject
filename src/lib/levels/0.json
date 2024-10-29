@@ -47,34 +47,49 @@
       "height": 8
     },
     {
-      "pos": [312, 16],
+      "pos": [312, 8],
+      "width": 64,
+      "height": 24
+    },
+    {
+      "pos": [408, 0],
+      "width": 24,
+      "height": 32
+    },
+    {
+      "pos": [432, 8],
+      "width": 40,
+      "height": 24
+    },
+    {
+      "pos": [496, 8],
       "width": 8,
       "height": 8
     },
     {
-      "pos": [320, 8],
+      "pos": [528, 8],
       "width": 8,
       "height": 8
     },
     {
-      "pos": [328, 0],
+      "pos": [560, 8],
       "width": 8,
       "height": 8
     },
     {
-      "pos": [336, -8],
+      "pos": [592, 8],
       "width": 8,
       "height": 8
     },
     {
-      "pos": [344, -16],
-      "width": 8,
-      "height": 8
+      "pos": [624, 8],
+      "width": 32,
+      "height": 24
     },
     {
-      "pos": [352, -24],
-      "width": 8,
-      "height": 8
+      "pos": [656, 0],
+      "width": 32,
+      "height": 32
     }
   ],
   "plaques": [
@@ -82,6 +97,11 @@
       "id": "movement",
       "x": -16,
       "y": -32
+    },
+    {
+      "id": "zoomies",
+      "x": 472,
+      "y": -64
     }
   ],
   "gravity": 0.175,
