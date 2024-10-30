@@ -3,7 +3,7 @@
   import Icon from "$lib/components/icon.svelte";
 
   const svgContent = $page.data.svgContent;
-  const games = $page.data.games;
+  const games: {id: number, name: string, colour: string}[] = $page.data.games;
   const leaderboard : {gameid: number, points: number, user: string}[] = $page.data.leaderboard
     .sort((l1: {points: number}, l2: {points: number}) => l2.points - l1.points)
     .slice(0,50);
@@ -27,10 +27,10 @@
       <section>
         <h2>Leaderboards</h2>
         <div class="leaderboards">
-          {#each games as game}
+          {#each games.sort((a,b) => a.id - b.id) as game}
             <div class="gamesection">
               <div class="toggleopen">
-                <input type="checkbox" id={game.id}><label for={game.id}><div class="icon"><Icon icon='chevron_right'/></div>{game.name}</label>
+                <input type="checkbox" id={game.id.toString()}><label for={game.id.toString()}><div class="icon"><Icon icon='chevron_right'/></div>{game.name}</label>
               </div>
               <div class="leaderboard">
                 <div class="innerleaderboard">
