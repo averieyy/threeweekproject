@@ -12,6 +12,7 @@ const bouncepads = loadImages(BouncePadSrc, 8, 8);
 export class BouncePad implements Renderable {
   hitbox: HitBox;
   pos: Vector2;
+  animationframe: number = 0;
 
   constructor (position: Vector2) {
     this.pos = position;
@@ -19,15 +20,18 @@ export class BouncePad implements Renderable {
   }
 
   collide(player: Player) {
-    player.velocity.y = -5;
+    player.velocity.y = -4.5;
     player.hitbouncepad = true;
     player.ground = undefined;
   }
 
   render (ctx: OffscreenCanvasRenderingContext2D, camera: Camera) {
-    if (!bouncepads[0]) return;
+    this.animationframe += 1 / 30;
+
+    const image = bouncepads[Math.floor(this.animationframe) % 4];
+    if (!image) return;
     ctx.drawImage(
-      bouncepads[0],
+      image,
       Math.floor(this.pos.x - camera.center.x + camera.width / 2),
       Math.floor(this.pos.y - camera.center.y + camera.height / 2)
     );
