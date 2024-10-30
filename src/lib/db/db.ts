@@ -18,6 +18,8 @@ const defaultDatabase: dataBaseStructure = { users: [], leaderboard: [], games: 
   {id: 2, name: 'Neoclicker', plays: 0, url: '/play/neoclicker', colour: '#5e81ac'},
 ], tokens: [] };
 
+const db = await JSONFilePreset<dataBaseStructure>('db.json', defaultDatabase);
+
 export async function getDatabase() : Promise<Low<dataBaseStructure>> {
-  return await JSONFilePreset<dataBaseStructure>('db.json', defaultDatabase);
+  return db;
 }
