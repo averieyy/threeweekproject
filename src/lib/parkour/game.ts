@@ -49,6 +49,9 @@ export class Game {
     this.starttime = Date.now();
 
     this.mainloop();
+
+    // Record this play to the database
+    fetch('/api/play', { method: 'POST', body: '{"gameid": 0}' });
   }
 
   keybinds () {

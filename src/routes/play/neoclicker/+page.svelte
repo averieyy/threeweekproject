@@ -52,6 +52,9 @@
       score += tickpoints;
     }, timing);
 
+    // Record this play to the database
+    fetch('/api/play', { method: 'POST', body: '{"gameid": 2}' });
+
     setInterval(updateLeaderboards, 60000); // Update leaderboard entry every 60 seconds
   });
 

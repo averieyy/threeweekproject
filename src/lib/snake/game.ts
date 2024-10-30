@@ -59,6 +59,9 @@ export class Game {
   }
 
   mainloop () {
+    // Record play to the database
+    fetch('/api/play', { method: 'POST', body: '{"gameid": 1}' });
+
     this.maininterval = setInterval(() => {
       if (this.board.finished) {
         this.size += 2;
