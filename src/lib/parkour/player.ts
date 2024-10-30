@@ -31,6 +31,8 @@ export class Player implements Renderable {
 
   dead: boolean = false;
 
+  hitbouncepad: boolean = false;
+
   constructor (name: string, level: Level) {
     this.name = name;
     this.level = level;
@@ -145,7 +147,9 @@ export class Player implements Renderable {
 
     if (!up) {
       // Cancel jump mid-air
-      this.velocity.y = Math.max(this.velocity.y, 0);
+      this.hitbouncepad = this.hitbouncepad && this.velocity.y < 0;
+      if (!this.hitbouncepad)
+        this.velocity.y = Math.max(this.velocity.y, 0);
     }
 
     if (!this.sliding) {
@@ -170,7 +174,7 @@ export class Player implements Renderable {
   }
 
   doFriction () {
-    console.log(!!this.ground);
+    // console.log(!!this.ground);
     
     if (!this.sliding && this.ground) {
       this.velocity.x *= 1 - this.ground.friction;
@@ -183,6 +187,7 @@ export class Player implements Renderable {
       this.velocity.x *= .98;
     }
   }
+  
   ressurect () {
     this.dead = false;
 

@@ -96,6 +96,10 @@ export class Game {
       platform.render(this.bufferctx, this.camera);
     }
 
+    for (let bouncepad of this.player.level.bouncepads) {
+      bouncepad.render(this.bufferctx, this.camera);
+    }
+
     for (let infoplaque of this.player.level.plaques) {
       infoplaque.render(this.bufferctx, this.camera);
     }
@@ -117,7 +121,9 @@ export class Game {
     // (this.currenttime / 1000).toFixed(1)
 
     for (let i = 0; i < textTime.length; i++) {
-      this.bufferctx.drawImage(numbers[numbersInNumbers.indexOf(textTime[i])], 2 + i * 4, 2);
+      const image = numbers[numbersInNumbers.indexOf(textTime[i])];
+      if (!image) break;
+      this.bufferctx.drawImage(image, 2 + i * 4, 2);
     }
 
     // Switch buffers
@@ -137,8 +143,8 @@ export class Game {
     setInterval(() => {
       this.currenttime = Date.now() - this.starttime;
       this.player.move(this.directions);
-      // Tick
 
+      // Tick
       this.player.position.x += this.player.velocity.x;
       this.player.position.y += this.player.velocity.y;
 
@@ -156,11 +162,16 @@ export class Game {
       this.player.updatePosition()
 
       const overlapping = this.player.getOverlapping();
-
+      
       this.player.collide(overlapping);
       this.player.adjustForGround(this.directions);
       this.player.updatePosition();
-
+      
+      // Chack for bouncepads
+      for (let bouncepad of this.player.level.bouncepads) {
+        if (this.player.hitbox.overlaps(bouncepad.hitbox)) bouncepad.collide(this.player);
+      }
+      
       if (this.player.position.y > 96) this.player.dead = true;
       if (!this.player.dead) deadsplash.hide();
 

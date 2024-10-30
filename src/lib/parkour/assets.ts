@@ -2,7 +2,7 @@ import Running from '$lib/assets/parkour/running.png';
 import Crouching from '$lib/assets/parkour/crouching.png';
 import Numbers from '$lib/assets/parkour/numbers.png';
 
-function loadImages(path: string, width: number, height: number): CanvasImageSource[] {
+export function loadImages(path: string, width: number, height: number): CanvasImageSource[] {
   const outpimg = new OffscreenCanvas(width, height)
   const imagectx = outpimg.getContext('2d');
   const image = new Image();
