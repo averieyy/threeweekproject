@@ -6,17 +6,17 @@ export const load: PageServerLoad = async ({ cookies }) => {
   const database = await getDatabase();
 
   const token = cookies.get('token');
-  if (!token) redirect(302, '/signin');
+  if (!token) redirect(302, '/signup');
 
   const { users, tokens } = database.data;
   
   const tokenobj = tokens.find(t => t.content == token);
 
-  if (!tokenobj) redirect(302, '/signin');
+  if (!tokenobj) redirect(302, '/signup');
 
   const user = users.find(u => u.id == tokenobj.userid);
 
-  if (!user) redirect(302, '/signin');
+  if (!user) redirect(302, '/signup');
   
   console.log('ran', user.totpsecret);
 

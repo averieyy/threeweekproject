@@ -21,7 +21,7 @@
       </a>
     {:else}
       <a class="button" href="/login">Log in</a>
-      <a class="button" href="/signin">Sign up</a>
+      <a class="button" href="/signup">Sign up</a>
     {/if}
   </div>
 </header>

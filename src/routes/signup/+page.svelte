@@ -8,7 +8,7 @@
   const redirectURL = $page.url.searchParams.get('redirect');
 
   function signin (username: string, email: string, password: string) {
-    fetch ('/api/signin', {method: 'POST',
+    fetch ('/api/signup', {method: 'POST',
       body: JSON.stringify({
         username,
         email,
@@ -33,7 +33,7 @@
 
 <main>
   <Loginform submit={signin} title="Sign up" errorMessage={errorMessage} />
-  <a href={'/login' + redirectURL && `redirect=${redirectURL}`}>Already have an account? Log in</a>
+  <a href={`/login?redirect=${redirectURL || ''}`}>Already have an account? Log in</a>
 </main>
 
 <style>

@@ -1,7 +1,4 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { createTestAccount, createTransport } from 'nodemailer';
-import 'dotenv/config';
-import { TOTP } from 'otpauth';
 import { getDatabase } from "$lib/db/db";
 import { hashPassword } from "$lib/auth/hasher";
 import { genToken } from "$lib/db/token";

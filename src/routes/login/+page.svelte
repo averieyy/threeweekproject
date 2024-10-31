@@ -34,7 +34,7 @@
 
 <main>
   <Loginform submit={submit} title="Log in" errorMessage={errorMessage} />
-  <a href={'/signin' + redirectURL && `redirect=${redirectURL}`}>Don't have an account? Sign up</a>
+  <a href={`/signup?redirect=${redirectURL || ''}`}>Don't have an account? Sign up</a>
 </main>
 
 <style>
