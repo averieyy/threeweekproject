@@ -17,7 +17,7 @@ onMount(() => {
   <title>Snake</title>
 </svelte:head>
 
-<canvas bind:this={canvas} />
+<canvas bind:this={canvas}></canvas>
 
 <style>
   canvas {

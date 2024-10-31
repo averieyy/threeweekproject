@@ -1,7 +1,7 @@
 <script lang="ts">
   import Icon from "./icon.svelte";
 
-  export let user: { name: string, id: number } | null;
+  let { user }: { user :{ name: string, id: number } | null } = $props();
 </script>
 
 <header>

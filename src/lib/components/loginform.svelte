@@ -1,20 +1,22 @@
 <script lang="ts">
 
-export let submit: (username: string, email:string, password:string) => void;
-export let title: string;
-export let errorMessage: string | undefined;
+let { submit, title, errorMessage }: {
+  submit: (username: string, email:string, password:string) => void,
+  title: string,
+  errorMessage: string | undefined,
+} = $props();
 
 const onsubmit = () => {
   submit(username, email, password);
 }
 
-let username : string;
-let email : string;
-let password : string;
+let username : string = $state('');
+let email : string = $state('');
+let password : string = $state('');
 
 </script>
 
-<form on:submit={onsubmit}>
+<form onsubmit={onsubmit}>
   <h2>{title}</h2>
   {#if errorMessage}
     <span>{errorMessage}</span>

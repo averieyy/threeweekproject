@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-    import { page } from "$app/stores";
+  import { page } from "$app/stores";
   import Loginform from "$lib/components/loginform.svelte";
 
-  let errorMessage = '';
+  let errorMessage = $state('');
 
   const redirectURL = $page.url.searchParams.get('redirect');
 

@@ -16,10 +16,9 @@
   <title>Parkour</title>
 </svelte:head>
 
-<canvas bind:this={canvas} />
+<canvas bind:this={canvas}></canvas>
 
 <style>
-
   canvas {
     image-rendering: pixelated;
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
-    import Icon from "$lib/components/icon.svelte";
+  import Icon from "$lib/components/icon.svelte";
 
   const data = $page.data;
 </script>
@@ -29,9 +29,6 @@
 </main>
 
 <style>
-  .linkback {
-    padding: .5rem;
-  }
   a {
     display: flex;
     flex-direction: row;

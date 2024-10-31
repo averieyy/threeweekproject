@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let icon: string;
+  let { icon }: { icon: string } = $props();
 </script>
 
 <span class="material-symbols-outlined">{icon}</span>

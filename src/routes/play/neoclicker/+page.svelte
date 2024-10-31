@@ -1,9 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  let points = 0;
-  let displayPoints : string;
-  let pps = 0;
+  let points = $state(0);
+  let pps = $state(0);
 
   let score = 0;
 
@@ -17,14 +16,14 @@
     price: number,
   }
   
-  let upgrades: upgrade[] = [
+  let upgrades: upgrade[] = $state([
     {name: 'Click me!', cps: 0, bonus: 1, count: 0, price: 0},
     {name: 'Autoclicker', cps: .5, bonus: 0, count: 0, price: 10},
     {name: 'Autoclicker 2', cps: 1, bonus: 0, count: 0, price: 100},
     {name: 'Autoclicker 3', cps: 10, bonus: 0, count: 0, price: 1000},
     {name: 'Autoclicker 4', cps: 100, bonus: 0, count: 0, price: 10000},
     {name: 'Autoclicker 5', cps: 1000, bonus: 0, count: 0, price: 100000},
-  ];
+  ]);
 
   function buy(upgrade: upgrade) {
     const u = upgrades.find((u) => u == upgrade);
@@ -58,9 +57,7 @@
     setInterval(updateLeaderboards, 60000); // Update leaderboard entry every 60 seconds
   });
 
-  $: {
-    displayPoints = points.toFixed(1).toString();
-  }
+  const displayPoints = $derived(points.toFixed(1));
 </script>
 
 <svelte:head>
@@ -74,7 +71,7 @@
   
   <div class="upgrades">
     {#each upgrades as upgrade}
-      <button on:click={() => buy(upgrade)} class={`${points >= upgrade.price ? 'available' : 'unavailable'}`}>{upgrade.name} [{upgrade.count}]</button>
+      <button onclick={() => buy(upgrade)} class={`${points >= upgrade.price ? 'available' : 'unavailable'}`}>{upgrade.name} [{upgrade.count}]</button>
     {/each}
   </div>
 </div>

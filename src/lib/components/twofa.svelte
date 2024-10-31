@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
-    import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
 
-  export let verify: boolean = false;
+  let { verify = false }: { verify: boolean } = $props();
 
   const redirectURL = $page.url.searchParams.get('redirect');
 
@@ -10,7 +10,7 @@
 
   let inputcontainer: HTMLFormElement;
   
-  let errorMessage = '';
+  let errorMessage = $state('');
 
   function update(n: number, ev: Event & {currentTarget: HTMLInputElement}) {
     const value = ev.currentTarget.value;
@@ -60,12 +60,12 @@
   {#if errorMessage}
     <span class="error">{errorMessage}</span>
   {/if}
-  <form class="input" bind:this={inputcontainer} on:submit={submit}>
+  <form class="input" bind:this={inputcontainer} onsubmit={submit}>
     {#each items as i}
-      <input inputmode="numeric" maxlength="1" placeholder='0' on:input={(ev) => update(i, ev)}/>
+      <input inputmode="numeric" maxlength="1" placeholder='0' oninput={(ev) => update(i, ev)}/>
     {/each}
   </form>
-  <button class="button" on:click={submit}>
+  <button class="button" onclick={submit}>
     {#if verify}
       Verify
     {:else}

@@ -1,26 +1,24 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import { Authentication } from "$lib/auth/authservice";
     import Twofa from "$lib/components/twofa.svelte";
-  import { redirect } from "@sveltejs/kit";
   import { Secret, TOTP } from "otpauth";
   import { toDataURL } from "qrcode";
   import { onMount } from "svelte";
 
   const token = $page.data.totpsecret;
 
-  let justshowcode: boolean = false;
+  let justshowcode: boolean = $state(false);
 
   const toggleShowCode = () => justshowcode = !justshowcode; 
 
   const uri = Authentication.generateTOTPObject(Secret.fromBase32(token)).toString();
 
-  let qrcode: string;
+  let qrcode: string = $state('');
 
   onMount(async () => {
     qrcode = await toDataURL(uri);
-  })
+  });
 </script>
 
 <main>
@@ -31,9 +29,9 @@
     {:else}
       <img src={qrcode} alt="A qr code that can be scanned to authenticate with an app."/>
     {/if}
-    <button class="button" on:click={toggleShowCode}>{#if justshowcode}Show QR code{:else}Show raw Secret{/if}</button>
+    <button class="button" onclick={toggleShowCode}>{#if justshowcode}Show QR code{:else}Show raw Secret{/if}</button>
   </div>
-  <Twofa verify/>
+  <Twofa verify />
 </main>
 
 <style>

@@ -31,7 +31,6 @@
     padding: .5rem;
   }
   main {
-
     display: flex;
     flex-direction: row;
     justify-content: center;
