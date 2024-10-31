@@ -154,6 +154,13 @@
       "y": 40
     }
   ],
+  "coffee": {
+    "pos": {
+      "x": 1436,
+      "y": -24
+    },
+    "redirect": 0
+  },
   "gravity": 0.175,
   "startpos": [0, 0]
 }

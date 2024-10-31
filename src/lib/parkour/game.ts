@@ -106,6 +106,8 @@ export class Game {
     
     this.player.render(this.bufferctx, this.camera);
 
+    this.player.level.coffee.render(this.bufferctx, this.camera);
+
     deadsplash.render(this.bufferctx);
 
     // Render time
@@ -171,6 +173,10 @@ export class Game {
       for (let bouncepad of this.player.level.bouncepads) {
         if (this.player.hitbox.overlaps(bouncepad.hitbox)) bouncepad.collide(this.player);
       }
+
+      // Check for coffee
+      if (this.player.hitbox.overlaps(this.player.level.coffee.hitbox))
+        this.player.level.coffee.collide(this.player);
       
       if (this.player.position.y > 96) this.player.dead = true;
       if (!this.player.dead) deadsplash.hide();
