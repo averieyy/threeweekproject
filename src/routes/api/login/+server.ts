@@ -36,7 +36,7 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
 
       database.update(({ tokens }) => tokens.push(token));
 
-      cookies.set('token', token.content, {path: '/'});
+      cookies.set('token', token.content, {path: '/', secure: false});
     }
   }
 

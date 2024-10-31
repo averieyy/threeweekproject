@@ -1,6 +1,7 @@
 import { Authentication } from "$lib/auth/authservice";
 import { genSalt, hashPassword } from "$lib/auth/hasher";
 import { getDatabase } from "$lib/db/db";
+import { genToken, type token } from "$lib/db/token";
 import type { User } from "$lib/db/user";
 import type { RequestHandler } from "@sveltejs/kit";
 
@@ -34,7 +35,12 @@ export const POST: RequestHandler = async ({cookies, request}) => {
 
   const user: User = {id, email, username, totpsecret: totpsecret.base32, salt, hash};
 
+  const token : token = {content: await genToken(), authenticated: false, userid: user.id, lastused: new Date()};       
+
+  cookies.set('token', token.content, {path: '/', secure: false});
+
   database.update(({ users }) => users.push(user));
+  database.update(({ tokens }) => tokens.push(token));
 
   return respond({code: 302, 'location': '2fa'});
 }
