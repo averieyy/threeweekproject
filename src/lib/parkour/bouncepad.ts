@@ -16,7 +16,7 @@ export class BouncePad implements Renderable {
 
   constructor (position: Vector2) {
     this.pos = position;
-    this.hitbox = new HitBox(position, 8, 2);
+    this.hitbox = new HitBox(position, 8, 4);
   }
 
   collide(player: Player) {
