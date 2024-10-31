@@ -4,6 +4,7 @@ import type { Vector2 } from "./vector2";
 import { InfoPlaque } from "./infoplaque";
 import { BouncePad } from "./bouncepad";
 import { Coffee } from "./coffee";
+import { Spikes } from "./spikes";
 
 interface jsonLevel {
   name: string,
@@ -13,6 +14,7 @@ interface jsonLevel {
   bouncepads?: {x: number, y: number}[],
   gravity: number,
   coffee: { pos: Vector2, redirect: number },
+  spikes: {x: number, y: number, width: number}[],
 }
 
 export class Level {
@@ -23,6 +25,7 @@ export class Level {
   platforms: Platform[];
   plaques: InfoPlaque[];
   bouncepads: BouncePad[];
+  spikes: Spikes[];
 
   startPos: Vector2;
 
@@ -30,7 +33,7 @@ export class Level {
 
   coffee: Coffee;
 
-  constructor (id: number, name: string, platforms: Platform[], startPos: Vector2, plaques: InfoPlaque[] = [], bouncepads: BouncePad[], coffee: Coffee, gravity: number) {
+  constructor (id: number, name: string, platforms: Platform[], startPos: Vector2, plaques: InfoPlaque[] = [], bouncepads: BouncePad[], coffee: Coffee, gravity: number, spikes: Spikes[]) {
     this.name = name;
     this.id = id;
     this.platforms = platforms;
@@ -39,6 +42,7 @@ export class Level {
     this.bouncepads = bouncepads;
     this.coffee = coffee;
     this.gravity = gravity;
+    this.spikes = spikes;
   }
 
   static fromJSON (id: number, json: jsonLevel) : Level {
@@ -60,6 +64,7 @@ export class Level {
       (json.bouncepads || []).map(b => new BouncePad({x: b.x, y: b.y})),
       new Coffee(json.coffee.pos, json.coffee.redirect),
       json.gravity,
+      json.spikes.map(s => new Spikes({ x: s.x, y: s.y }, s.width))
     );
   }
 }

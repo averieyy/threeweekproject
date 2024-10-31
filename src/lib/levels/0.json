@@ -162,5 +162,6 @@
     "redirect": 1
   },
   "gravity": 0.175,
-  "startpos": [0, 0]
+  "startpos": [0, 0],
+  "spikes": []
 }

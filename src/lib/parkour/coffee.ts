@@ -41,6 +41,9 @@ export class Coffee implements Renderable {
     this.animationframe %= 4;
 
     const image = cupImages[Math.floor(this.animationframe)];
+
+    if (!image) return;
+
     ctx.drawImage(
       image,
       Math.floor(this.pos.x - camera.center.x + camera.width / 2),

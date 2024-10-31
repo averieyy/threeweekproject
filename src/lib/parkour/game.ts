@@ -92,6 +92,10 @@ export class Game {
   render() {
     this.bufferctx.clearRect(0,0,this.canvaswidth, this.canvasheight);
 
+    for (let spike of this.player.level.spikes) {
+      spike.render(this.bufferctx, this.camera);
+    }
+
     for (let platform of this.player.level.platforms) {
       platform.render(this.bufferctx, this.camera);
     }
@@ -172,6 +176,10 @@ export class Game {
       // Chack for bouncepads
       for (let bouncepad of this.player.level.bouncepads) {
         if (this.player.hitbox.overlaps(bouncepad.hitbox)) bouncepad.collide(this.player);
+      }
+
+      for (let spike of this.player.level.spikes) {
+        if (this.player.hitbox.overlaps(spike.hitbox)) spike.collide(this.player);
       }
 
       // Check for coffee
