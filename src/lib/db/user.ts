@@ -7,4 +7,5 @@ export interface User {
   salt: string,
   totpsecret: string,
   email: string,
+  registered2fa: boolean,
 }

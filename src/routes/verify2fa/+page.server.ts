@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
 
   const user = await getUserFromToken(token, true);
 
-  if (!user) redirect(302, '/signup');
+  if (!user || user.registered2fa) redirect(302, '/signup');
   
   return {
     totpsecret: user.totpsecret,

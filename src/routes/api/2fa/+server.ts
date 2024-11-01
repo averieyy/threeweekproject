@@ -31,9 +31,11 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
     return respond({message: 'Authentication code invalid'}, 403);
   }
 
-  database.update(({ tokens }) => {
-    let t = tokens.find(t => t.content == token);
+  database.update(({ tokens, users }) => {
+    const u = users.find(u => u.id == user.id);
+    const t = tokens.find(t => t.content == token);
     if (t) t.authenticated = true
+    if (u) u.registered2fa = true;
   });
 
   return respond({message: 'Authenticated'}, 200);
