@@ -7,7 +7,7 @@ import BouncePadSrc from '$lib/assets/parkour/bouncepads.png';
 import { loadImages } from "./assets";
 import type { Camera } from "./camera";
 
-const bouncepads = loadImages(BouncePadSrc, 8, 8);
+export const bouncepadimgs = loadImages(BouncePadSrc, 8, 8);
 
 export class BouncePad implements Renderable {
   hitbox: HitBox;
@@ -16,11 +16,11 @@ export class BouncePad implements Renderable {
 
   constructor (position: Vector2) {
     this.pos = position;
-    this.hitbox = new HitBox(position, 8, 4);
+    this.hitbox = new HitBox({ x: position.x, y: position.y + 4 }, 8, 4);
   }
 
   collide(player: Player) {
-    player.velocity.y = -4.5;
+    player.velocity.y = -4.75;
     player.hitbouncepad = true;
     player.ground = undefined;
   }
@@ -28,7 +28,7 @@ export class BouncePad implements Renderable {
   render (ctx: OffscreenCanvasRenderingContext2D, camera: Camera) {
     this.animationframe += 1 / 30;
 
-    const image = bouncepads[Math.floor(this.animationframe) % 4];
+    const image = bouncepadimgs[Math.floor(this.animationframe) % 4];
     if (!image) return;
     ctx.drawImage(
       image,

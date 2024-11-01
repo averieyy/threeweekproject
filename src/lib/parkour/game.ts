@@ -1,9 +1,10 @@
 import { numbers } from "./assets";
 import { Camera } from "./camera";
 import { Level } from "./level";
-import { Platform } from "./platform";
 import { Player } from "./player";
 import { deadsplash } from "./splash";
+
+Level.loadLevels();
 
 const numbersInNumbers = '0123456789.:';
 

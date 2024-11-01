@@ -5,19 +5,41 @@
       "pos": [-32, 16],
       "width": 72,
       "height": 8
+    },
+    {
+      "pos": [-40, -72],
+      "width": 8,
+      "height": 96
+    },
+    {
+      "pos": [112, 32],
+      "width": 72,
+      "height": 8
+    },
+    {
+      "pos": [272, -8],
+      "width": 72,
+      "height": 8
     }
   ],
   "plaques": [
-
+    {
+      "id": "hop",
+      "x": 32,
+      "y": -48
+    }
   ],
   "bouncepads": [
-
+    {
+      "x": 176,
+      "y": 24
+    }
   ],
   "spikes": [],
   "coffee": {
     "pos": {
-      "x": 100,
-      "y": 0
+      "x": 0,
+      "y": 100
     },
     "redirect": 0
   },

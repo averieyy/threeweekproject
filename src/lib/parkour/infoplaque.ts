@@ -4,20 +4,26 @@ import type { Renderable } from "./renderable";
 
 import Movement from '$lib/assets/parkour/info/movement.png';
 import Zoomies from '$lib/assets/parkour/info/zoomies.png';
+import Hop from '$lib/assets/parkour/info/hop.png';
 
 export class InfoPlaque implements Renderable {
   static plaquePaths: {[key: string] : string} = {
     movement: Movement,
     zoomies: Zoomies,
+    hop: Hop,
   };
+
   image: HTMLImageElement;
   pos: Vector2;
+  id: string;
 
-  constructor (path: string, position: Vector2) {
+  constructor (id: string, position: Vector2) {
     this.image = new Image();
-    this.image.src = path;
+    this.image.src = InfoPlaque.plaquePaths[id];
 
     this.pos = position;
+
+    this.id = id;
   }
 
   render (ctx: OffscreenCanvasRenderingContext2D, camera: Camera) {

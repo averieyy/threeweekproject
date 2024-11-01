@@ -6,8 +6,8 @@ import type { Vector2 } from "./vector2";
 import type { Player } from "./player";
 
 import Spike from '$lib/assets/parkour/spikes.png';
-const image = new Image();
-image.src = Spike;
+export const spikesimg = new Image();
+spikesimg.src = Spike;
 
 const SPIKEWIDTH = 8;
 const SPIKEHEIGHT = 8;
@@ -31,10 +31,10 @@ export class Spikes implements Renderable {
   }
 
   render(ctx: OffscreenCanvasRenderingContext2D, camera: Camera) {
-    if (!image) return;
+    if (!spikesimg) return;
     for (let x = 0; x < this.width; x += SPIKEWIDTH) {
       ctx.drawImage(
-        image,
+        spikesimg,
         Math.floor(this.position.x + x - camera.center.x + camera.width / 2),
         Math.floor(this.position.y - camera.center.y + camera.height / 2)
       );
