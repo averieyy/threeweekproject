@@ -10,7 +10,7 @@ const image = new Image();
 image.src = Spike;
 
 const SPIKEWIDTH = 8;
-const SPIKEHEIGHT = 4;
+const SPIKEHEIGHT = 8;
 
 export class Spikes implements Renderable {
   position: Vector2;
@@ -23,7 +23,7 @@ export class Spikes implements Renderable {
     this.position = pos;
     this.width = width;
     
-    this.hitbox = new HitBox(pos, width, this.height);
+    this.hitbox = new HitBox({ x: pos.x + 1, y: pos.y + 1}, width - 2, this.height - 2);
   }
 
   collide(player: Player) {
@@ -38,6 +38,6 @@ export class Spikes implements Renderable {
         Math.floor(this.position.x + x - camera.center.x + camera.width / 2),
         Math.floor(this.position.y - camera.center.y + camera.height / 2)
       );
-    } 
+    }
   }
 }

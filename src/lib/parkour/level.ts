@@ -71,8 +71,10 @@ export class Level {
 
 import level0 from '$lib/levels/0.json';
 import level1 from '$lib/levels/1.json';
+import level2 from '$lib/levels/2.json';
 
 Level.levels = [
+  Level.fromJSON(2, level2),
   Level.fromJSON(1, level1),
   Level.fromJSON(0, level0),
 ]

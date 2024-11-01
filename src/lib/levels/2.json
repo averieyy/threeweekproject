@@ -1,0 +1,26 @@
+{
+  "name": "tempname",
+  "platforms": [
+    {
+      "pos": [-32, 16],
+      "width": 72,
+      "height": 8
+    }
+  ],
+  "plaques": [
+
+  ],
+  "bouncepads": [
+
+  ],
+  "spikes": [],
+  "coffee": {
+    "pos": {
+      "x": 100,
+      "y": 0
+    },
+    "redirect": 0
+  },
+  "gravity": 0.175,
+  "startpos": [0, 0]
+}
