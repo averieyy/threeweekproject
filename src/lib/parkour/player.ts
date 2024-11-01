@@ -174,7 +174,6 @@ export class Player implements Renderable {
   }
 
   doFriction () {
-    // console.log(!!this.ground);
     
     if (!this.sliding && this.ground) {
       this.velocity.x *= 1 - this.ground.friction;

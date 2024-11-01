@@ -1,5 +1,6 @@
 import { Authentication } from "$lib/auth/authservice";
 import { getDatabase } from "$lib/db/db";
+import { getUserFromToken } from "$lib/db/token";
 import { type RequestHandler } from "@sveltejs/kit";
 import { Secret } from "otpauth";
 
@@ -13,18 +14,11 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
   if (!token)
     return respond({message: 'Not authenticated'}, 302, {'Location': '/login'});
 
-  // Connect to database
   const database = await getDatabase();
 
-  const { users, tokens } = database.data;
+  const user = await getUserFromToken(token, true);
 
-  const tokenobj = tokens.find(t => t.content == token);
-  if (!tokenobj) return respond({message: 'Not authenticated'}, 302, {'Location': '/login'});
-
-  // Get user by token
-  const user = users.find(u => u.id == tokenobj.userid);
-
-  if (!user) return respond({message: 'Not authenticated'}, 302, {'Location': '/login'});
+  if (!user) return respond({message: 'Not authenticated', status: 403}, 403);
 
   // TOTP
   const secret = Secret.fromBase32(user.totpsecret);

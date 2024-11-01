@@ -1,4 +1,5 @@
 import { getDatabase } from "$lib/db/db";
+import { getUserFromToken } from "$lib/db/token";
 import type { RequestHandler } from "@sveltejs/kit";
 
 export const POST: RequestHandler = async ({ cookies, request }) => {
@@ -8,10 +9,8 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
   if (!token) return respond({ message: 'Unauthorized' }, 403);
 
   const database = await getDatabase();
-  const { tokens, users } = database.data;
-
-  const tokenobj = tokens.find(t => t.content == token);
-  const user = users.find(u => u.id == tokenobj?.userid);
+  
+  const user = await getUserFromToken(token);
 
   if (!user) return respond({message: 'Unauthorized'}, 403);
   

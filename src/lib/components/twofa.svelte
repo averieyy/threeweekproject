@@ -23,7 +23,6 @@
     if (!value && n != 0)
       inputcontainer.querySelectorAll('input')[n-1].focus();
     codevalues[n] = num;
-    console.log(codevalues);
 
     if (n < 5)
       inputcontainer.querySelectorAll('input')[n+1].focus();

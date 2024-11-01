@@ -1,15 +1,15 @@
 import { getDatabase } from "$lib/db/db";
-import type { PageServerLoad } from "./$types";
+import type { LayoutServerLoad } from "./$types";
 
 export const ssr = true;
 
-export const load: PageServerLoad = async ({ cookies }) => {
+export const load: LayoutServerLoad = async ({ cookies }) => {
   const token = cookies.get('token');
 
   const database = await getDatabase();
   const { tokens, users } = database.data;
 
-  const tokenobj = tokens.find(t => t.content == token);
+  const tokenobj = tokens.filter(t => t.authenticated).find(t => t.content == token);
 
   if (!tokenobj) return { user: null }
 

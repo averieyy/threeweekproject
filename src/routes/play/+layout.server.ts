@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
-import { getDatabase } from '$lib/db/db';
+import { getUserFromToken } from '$lib/db/token';
 
 export const load: LayoutServerLoad = async ({ cookies, url }) => {
   
@@ -8,14 +8,9 @@ export const load: LayoutServerLoad = async ({ cookies, url }) => {
   
   const token = cookies.get('token');
 
-  if (!token) redir();
+  if (!token) return redir();
   
-  const database = await getDatabase();
-  const { tokens, users } = database.data;
+  const user = await getUserFromToken(token);
   
-  const tokenobj = tokens.find(t => t.content == token);
-  if (!tokenobj) redir();
-  
-  const user = users.find(u => u.id == tokenobj?.userid);
-  if (!user) redir();
+  if (!user) return redir();
 };

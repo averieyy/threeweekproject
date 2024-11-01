@@ -1,4 +1,5 @@
 import { getDatabase } from "$lib/db/db";
+import { getUserFromToken } from "$lib/db/token";
 import type { RequestHandler } from "@sveltejs/kit";
 
 export const POST: RequestHandler = async ({ cookies, request }) => {
@@ -6,16 +7,14 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
 
   const { gameid } = await request.json();
 
-  if (!gameid) respond({message: 'Not found'}, 404);
+  if (!gameid) return respond({message: 'Not found'}, 404);
   
   const token = cookies.get('token');
-  if (!token) respond({message: 'Unauthorized'}, 403);
+  if (!token) return respond({message: 'Unauthorized'}, 403);
   
   const db = await getDatabase();
-  const { tokens, users } = db.data;
 
-  const tokenobj = tokens.find(t => t.content == token);
-  const user = users.find(u => u.id == tokenobj?.userid);
+  const user = await getUserFromToken(token);
 
   if (!user) return respond({message: 'Unauthorized'}, 403);
 
