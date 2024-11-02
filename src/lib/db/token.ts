@@ -2,7 +2,7 @@ import { getDatabase } from "./db";
 import { randomBytes } from 'crypto';
 import type { User } from "./user";
 
-const TOKENVALID = 1000 * 60 * 60 * 24; // Amount of time a token should be considered valid (in milliseconds)
+export const TOKENVALID = 1000 * 60 * 60 * 24; // Amount of time a token should be considered valid (in milliseconds)
 
 export interface token {
   content: string,

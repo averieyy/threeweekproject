@@ -116,10 +116,10 @@ export class Level {
 
   static loadLevels () {
     Level.levels = [
-      Level.fromJSON(3, longslide),
-      Level.fromJSON(2, hops),
-      Level.fromJSON(1, airbounce),
       Level.fromJSON(0, tutorial),
+      Level.fromJSON(1, longslide),
+      Level.fromJSON(2, hops),
+      Level.fromJSON(3, airbounce),
     ];
   }
 }

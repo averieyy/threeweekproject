@@ -31,6 +31,8 @@ export class Player implements Renderable {
 
   dead: boolean = false;
 
+  won: boolean = false;
+
   hitbouncepad: boolean = false;
 
   visiblePlatforms: Platform[] = [];

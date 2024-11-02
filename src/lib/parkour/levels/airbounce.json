@@ -259,7 +259,7 @@
       "x": 272,
       "y": -16
     },
-    "redirect": 0
+    "redirect": -1
   },
   "gravity": 0.175,
   "startpos": [0,0]

@@ -7,7 +7,7 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
 
   const { gameid } = await request.json();
 
-  if (!gameid) return respond({message: 'Not found'}, 404);
+  if (gameid == undefined) return respond({message: 'Not found'}, 404);
   
   const token = cookies.get('token');
   if (!token) return respond({message: 'Unauthorized'}, 403);

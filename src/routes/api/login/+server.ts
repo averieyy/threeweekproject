@@ -1,7 +1,7 @@
 import type { RequestHandler } from "@sveltejs/kit";
 import { getDatabase } from "$lib/db/db";
 import { hashPassword } from "$lib/auth/hasher";
-import { genToken } from "$lib/db/token";
+import { genToken, TOKENVALID } from "$lib/db/token";
 import type { token } from "$lib/db/token";
 
 // const testaccount = await createTestAccount();
@@ -33,7 +33,7 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
 
       database.update(({ tokens }) => tokens.push(token));
 
-      cookies.set('token', token.content, {path: '/', secure: false});
+      cookies.set('token', token.content, {path: '/', secure: false, maxAge: TOKENVALID});
     }
   }
 

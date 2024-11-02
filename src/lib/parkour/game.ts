@@ -3,6 +3,7 @@ import { Camera } from "./camera";
 import { Level } from "./level";
 import { Player } from "./player";
 import { deadsplash } from "./splash";
+import { toTimeString } from "../time";
 
 Level.loadLevels();
 
@@ -23,6 +24,8 @@ export class Game {
 
   starttime : number;
   currenttime: number = 0;
+
+  updatedHighscore: boolean = false;
 
   directions: { up: boolean, down: boolean, left: boolean, right: boolean } = {up: false, down: false, left: false, right: false };
 
@@ -116,16 +119,7 @@ export class Game {
     deadsplash.render(this.bufferctx);
 
     // Render time
-    const hours = Math.floor(this.currenttime / 3600000);
-    const minutes = Math.floor(this.currenttime / 60000) % 60;
-
-    const hourstext = hours != 0 && hours.toString().padStart(2, '0') + ':';
-    const minutestext = (hours != 0 || minutes != 0) && minutes.toString().padStart(2, '0') + ':';
-    const secondstext = Math.floor((this.currenttime / 1000) % 60).toString().padStart(2, '0');
-    const millisecondstext = (this.currenttime % 1000).toString().padStart(3, '0');
-
-    const textTime = `${hourstext || ''}${minutestext || ''}${secondstext}.${millisecondstext}`;
-    // (this.currenttime / 1000).toFixed(1)
+    const textTime = toTimeString(this.currenttime);
 
     for (let i = 0; i < textTime.length; i++) {
       const image = numbers[numbersInNumbers.indexOf(textTime[i])];
@@ -148,17 +142,28 @@ export class Game {
   mainloop () {
 
     setInterval(() => {
-      this.currenttime = Date.now() - this.starttime;
+      if (!this.player.won)
+        this.currenttime = Date.now() - this.starttime;
       
-      this.player.tick(this.directions, this.camera);
+      if (this.player.won) {
+        if (!this.updatedHighscore) {
+          fetch('/api/leaderboard', {method: 'POST', body: JSON.stringify({gameid: 0, points: this.currenttime})});
 
-      if (!this.player.dead) deadsplash.hide();
+          this.updatedHighscore = true;
+        }
 
-      if (this.player.dead) {
-        if (!deadsplash.showing) deadsplash.show();
       }
-
-      deadsplash.update();
+      else {
+        this.player.tick(this.directions, this.camera);
+  
+        if (!this.player.dead) deadsplash.hide();
+  
+        if (this.player.dead) {
+          if (!deadsplash.showing) deadsplash.show();
+        }
+  
+        deadsplash.update();
+      }
 
       // Render
       this.resize();

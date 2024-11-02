@@ -1,12 +1,11 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import Icon from "$lib/components/icon.svelte";
+    import { toTimeString } from "$lib/time";
 
   const svgContent = $page.data.svgContent;
-  const games: {id: number, name: string, colour: string}[] = $page.data.games;
-  const leaderboard : {gameid: number, points: number, user: string}[] = $page.data.leaderboard
-    .sort((l1: {points: number}, l2: {points: number}) => l2.points - l1.points)
-    .slice(0,50);
+  const games: {id: number, name: string, colour: string, speedrunning: boolean}[] = $page.data.games;
+  const leaderboard : {[key: number] : {gameid: number, points: number, user: string}[]} = $page.data.leaderboards;
 </script>
 
 <main>
@@ -33,22 +32,26 @@
                 <input type="checkbox" id={game.id.toString()}><label for={game.id.toString()}><div class="icon"><Icon icon='chevron_right'/></div>{game.name}</label>
               </div>
               <div class="leaderboard">
-                <div class="innerleaderboard">
-                  <div class="entryheader">
-                    <span>Player</span>
-                    <span>Points</span>
-                  </div>
-                  {#each leaderboard.filter(l => l.gameid == game.id) as entry}
-                    <div class="leaderboardentry">
-                      <span>
-                        {entry.user}
-                      </span>
-                      <span>
-                        {entry.points}
-                      </span>
+                {#if leaderboard[game.id] && leaderboard[game.id].length != 0}
+                  <div class="innerleaderboard">
+                    <div class="entryheader">
+                      <span>Player</span>
+                      <span>{game.speedrunning ? "Time" : "Points"}</span>
                     </div>
-                  {/each}
-                </div>
+                    {#each leaderboard[game.id] as entry}
+                      <div class="leaderboardentry">
+                        <span>
+                          {entry.user}
+                        </span>
+                        <span>
+                          {game.speedrunning ? toTimeString(entry.points) : entry.points}
+                        </span>
+                      </div>
+                    {/each}
+                  </div>
+                {:else}
+                  <span>No leaderboard entries</span>
+                {/if}
               </div>
             </div>
           {/each}

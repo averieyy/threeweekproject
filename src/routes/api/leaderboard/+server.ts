@@ -14,12 +14,24 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
 
   if (!user) return respond({message: 'Unauthorized'}, 403);
   
+  const { games } = database.data;
+
   const { gameid, points } = await request.json();
+
+  const game = games.find(g => g.id == gameid);
+
+  if (!game) return respond({message: 'Game not found'}, 404);
 
   database.update(({ leaderboard }) => {
     const entry = leaderboard.find(l => l.gameid == gameid && l.userid == user.id);
-    if (entry && entry.points < points) entry.points = points;
-    if (!entry) leaderboard.push({ gameid, points, userid: user.id });
+    if (entry) {
+      if (
+        game.speedrunning && entry.points > points || // Speedrunning game, less time spent
+        !game.speedrunning && entry.points < points   // Non-speedrunning game, more points gained
+      )
+        entry.points = points;
+    }
+    else leaderboard.push({ gameid, points, userid: user.id });
   });
 
   return respond({message: 'Changed entry'}, 200);

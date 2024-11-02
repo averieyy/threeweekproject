@@ -26,6 +26,9 @@ export class Coffee implements Renderable {
   }
 
   collide (player: Player) {
+    if (this.redirectTo === -1) {
+      player.won = true;
+    }
     const level = Level.levels.find(l => l.id == this.redirectTo);
     if (level) {
       player.level = level;
