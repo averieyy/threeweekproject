@@ -6,9 +6,10 @@ import { BouncePad } from "./bouncepad";
 import { Coffee } from "./coffee";
 import { Spikes } from "./spikes";
 
-import level0 from '$lib/levels/0.json';
-import level1 from '$lib/levels/1.json';
-import level2 from '$lib/levels/2.json';
+import tutorial from '$lib/parkour/levels/tutorial.json';
+import airbounce from '$lib/parkour/levels/airbounce.json';
+import hops from '$lib/parkour/levels/hops.json';
+import longslide from '$lib/parkour/levels/longslide.json';
 
 interface jsonLevel {
   name: string,
@@ -109,9 +110,10 @@ export class Level {
 
   static loadLevels () {
     Level.levels = [
-      Level.fromJSON(2, level2),
-      Level.fromJSON(1, level1),
-      Level.fromJSON(0, level0),
+      Level.fromJSON(3, longslide),
+      Level.fromJSON(2, hops),
+      Level.fromJSON(1, airbounce),
+      Level.fromJSON(0, tutorial),
     ];
   }
 }
