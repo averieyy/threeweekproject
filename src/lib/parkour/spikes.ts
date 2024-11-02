@@ -28,6 +28,7 @@ export class Spikes implements Renderable {
 
   collide(player: Player) {
     player.dead = true;
+    player.velocity = { x: 0, y: 0 }
   }
 
   render(ctx: OffscreenCanvasRenderingContext2D, camera: Camera) {
