@@ -2,7 +2,7 @@ import { numbers } from "./assets";
 import { Camera } from "./camera";
 import { Level } from "./level";
 import { Player } from "./player";
-import { deadsplash } from "./splash";
+import { deadsplash, winsplash } from "./splash";
 import { toTimeString } from "../time";
 
 Level.loadLevels();
@@ -117,6 +117,7 @@ export class Game {
     this.player.level.coffee.render(this.bufferctx, this.camera);
 
     deadsplash.render(this.bufferctx);
+    winsplash.render(this.bufferctx);
 
     // Render time
     const textTime = toTimeString(this.currenttime);
@@ -142,18 +143,19 @@ export class Game {
   mainloop () {
 
     setInterval(() => {
-      if (!this.player.won)
-        this.currenttime = Date.now() - this.starttime;
-      
-      if (this.player.won) {
-        if (!this.updatedHighscore) {
-          fetch('/api/leaderboard', {method: 'POST', body: JSON.stringify({gameid: 0, points: this.currenttime})});
+        if (this.player.won) {
+          if (!this.updatedHighscore) {
+            fetch('/api/leaderboard', {method: 'POST', body: JSON.stringify({gameid: 0, points: this.currenttime})});
+            
+            this.updatedHighscore = true;
+          }
 
-          this.updatedHighscore = true;
+          if (!winsplash.showing) winsplash.show();
+          
+          winsplash.update();
         }
-
-      }
       else {
+        this.currenttime = Date.now() - this.starttime;
         this.player.tick(this.directions, this.camera);
   
         if (!this.player.dead) deadsplash.hide();

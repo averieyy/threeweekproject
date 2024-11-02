@@ -1,5 +1,5 @@
 import DeadSplash from '$lib/assets/parkour/splashes/youdied.png';
-import type { Camera } from './camera';
+import WinSplash from '$lib/assets/parkour/splashes/youwon.png';
 import type { Renderable } from './renderable';
 
 export class Splash implements Renderable {
@@ -37,3 +37,4 @@ export class Splash implements Renderable {
 }
 
 export const deadsplash = new Splash(DeadSplash);
+export const winsplash = new Splash(WinSplash);

@@ -53,10 +53,12 @@ export class Player implements Renderable {
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
-    this.updatePosition();
+    this.ground = undefined;
 
+    this.updatePosition();
+    
     this.gravitate();
-    this.doFriction();
+
 
     // For testing
     // if (this.directions.up) this.position.y --;
@@ -74,6 +76,8 @@ export class Player implements Renderable {
     this.collide(allOverlapping);
     this.adjustForGround(directionkeys);
     this.updatePosition();
+
+    this.doFriction();
     
     // Chack for bouncepads
     for (let bouncepad of this.level.bouncepads) {

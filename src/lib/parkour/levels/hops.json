@@ -1,10 +1,7 @@
 {
   "gravity": 0.175,
   "name": "The hops",
-  "startpos": [
-    0,
-    0
-  ],
+  "startpos": [0, 0],
   "coffee": {
     "pos": {
       "x": 312,
