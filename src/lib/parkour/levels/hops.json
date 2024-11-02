@@ -1,27 +1,17 @@
 {
-  "name": "tempname",
-  "platforms": [
-    {
-      "pos": [-32, 16],
-      "width": 72,
-      "height": 8
-    },
-    {
-      "pos": [-40, -72],
-      "width": 8,
-      "height": 96
-    },
-    {
-      "pos": [112, 32],
-      "width": 72,
-      "height": 8
-    },
-    {
-      "pos": [272, -8],
-      "width": 72,
-      "height": 8
-    }
+  "gravity": 0.175,
+  "name": "Got the hops?",
+  "startpos": [
+    0,
+    0
   ],
+  "coffee": {
+    "pos": {
+      "x": 312,
+      "y": 72
+    },
+    "redirect": 0
+  },
   "plaques": [
     {
       "id": "hop",
@@ -29,20 +19,123 @@
       "y": -48
     }
   ],
+  "platforms": [
+    {
+      "pos": [
+        136,
+        152
+      ],
+      "width": 72,
+      "height": 8
+    },
+    {
+      "pos": [
+        280,
+        152
+      ],
+      "width": 128,
+      "height": 8
+    },
+    {
+      "pos": [
+        344,
+        -8
+      ],
+      "width": 8,
+      "height": 120
+    },
+    {
+      "pos": [
+        408,
+        -56
+      ],
+      "width": 8,
+      "height": 168
+    },
+    {
+      "pos": [
+        296,
+        96
+      ],
+      "width": 48,
+      "height": 8
+    },
+    {
+      "pos": [
+        112,
+        32
+      ],
+      "width": 72,
+      "height": 8
+    },
+    {
+      "pos": [
+        -32,
+        16
+      ],
+      "width": 72,
+      "height": 8
+    },
+    {
+      "pos": [
+        -40,
+        -72
+      ],
+      "width": 8,
+      "height": 96
+    },
+    {
+      "pos": [
+        272,
+        -8
+      ],
+      "width": 72,
+      "height": 8
+    },
+    {
+      "pos": [
+        168,
+        96
+      ],
+      "width": 64,
+      "height": 8
+    }
+  ],
+  "spikes": [
+    {
+      "width": 16,
+      "x": 352,
+      "y": 36
+    },
+    {
+      "width": 384,
+      "x": -40,
+      "y": 52
+    },
+    {
+      "width": 16,
+      "x": 392,
+      "y": -4
+    },
+    {
+      "width": 24,
+      "x": 368,
+      "y": 68
+    },
+    {
+      "width": 160,
+      "x": 184,
+      "y": 100
+    }
+  ],
   "bouncepads": [
     {
       "x": 176,
       "y": 24
-    }
-  ],
-  "spikes": [],
-  "coffee": {
-    "pos": {
-      "x": 0,
-      "y": 100
     },
-    "redirect": 0
-  },
-  "gravity": 0.175,
-  "startpos": [0, 0]
+    {
+      "x": 152,
+      "y": 144
+    }
+  ]
 }

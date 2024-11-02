@@ -97,7 +97,7 @@ export class Game {
       spike.render(this.bufferctx, this.camera);
     }
 
-    for (let platform of this.player.level.platforms) {
+    for (let platform of this.player.visiblePlatforms) {
       platform.render(this.bufferctx, this.camera);
     }
 

@@ -21,6 +21,7 @@ onMount(() => {
 
 <style>
   canvas {
+    max-width: 100%;
     image-rendering: pixelated;
     object-fit: contain;
     border: none;

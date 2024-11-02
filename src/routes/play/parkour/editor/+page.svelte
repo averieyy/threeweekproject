@@ -21,6 +21,7 @@
 <style>
   canvas {
     image-rendering: pixelated;
+    max-width: 100%;
 
     object-fit: contain;
   }

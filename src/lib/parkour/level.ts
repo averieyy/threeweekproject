@@ -32,6 +32,8 @@ export class Level {
   bouncepads: BouncePad[];
   spikes: Spikes[];
 
+  deathY: number;
+
   startPos: Vector2;
 
   gravity: number;
@@ -48,6 +50,10 @@ export class Level {
     this.coffee = coffee;
     this.gravity = gravity;
     this.spikes = spikes;
+
+    if (this.platforms.length > 0)
+      this.deathY = this.platforms.sort((p1, p2) => p2.corners.ll.y - p1.corners.ll.y)[0].corners.ll.y;
+    else this.deathY = 1;
   }
 
   static fromJSON (id: number, json: jsonLevel) : Level {

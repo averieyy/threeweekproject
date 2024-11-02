@@ -33,6 +33,8 @@ export class Player implements Renderable {
 
   hitbouncepad: boolean = false;
 
+  visiblePlatforms: Platform[] = [];
+
   constructor (name: string, level: Level) {
     this.name = name;
     this.level = level;
@@ -45,45 +47,48 @@ export class Player implements Renderable {
   tick (directionkeys: { up: boolean, down: boolean, left: boolean, right: boolean }, camera: Camera) {
     this.move(directionkeys);
 
-      // Tick
-      this.position.x += this.velocity.x;
-      this.position.y += this.velocity.y;
+    // Tick
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
 
-      this.updatePosition();
+    this.updatePosition();
 
-      this.gravitate();
-      this.doFriction();
+    this.gravitate();
+    this.doFriction();
 
-      // For testing
-      // if (this.directions.up) this.position.y --;
-      // if (this.directions.down) this.position.y ++;
-      // if (this.directions.left) this.position.x --;
-      // if (this.directions.right) this.position.x ++;
+    // For testing
+    // if (this.directions.up) this.position.y --;
+    // if (this.directions.down) this.position.y ++;
+    // if (this.directions.left) this.position.x --;
+    // if (this.directions.right) this.position.x ++;
 
-      this.updatePosition()
+    this.updatePosition();
 
-      const overlapping = this.getOverlapping();
-      
-      this.collide(overlapping);
-      this.adjustForGround(directionkeys);
-      this.updatePosition();
-      
-      // Chack for bouncepads
-      for (let bouncepad of this.level.bouncepads) {
-        if (this.hitbox.overlaps(bouncepad.hitbox)) bouncepad.collide(this);
-      }
+    this.visiblePlatforms = this.getVisiblePlatforms(camera);
 
-      for (let spike of this.level.spikes) {
-        if (this.hitbox.overlaps(spike.hitbox)) spike.collide(this);
-      }
+    const allOverlapping = this.getOverlapping();
+    // const overlapping = allOverlapping.filter(p => this.visiblePlatforms.includes(p));
+    
+    this.collide(allOverlapping);
+    this.adjustForGround(directionkeys);
+    this.updatePosition();
+    
+    // Chack for bouncepads
+    for (let bouncepad of this.level.bouncepads) {
+      if (this.hitbox.overlaps(bouncepad.hitbox)) bouncepad.collide(this);
+    }
 
-      // Check for coffee
-      if (this.hitbox.overlaps(this.level.coffee.hitbox))
-        this.level.coffee.collide(this);
-      
-      if (this.position.y > 96) this.dead = true;
+    for (let spike of this.level.spikes) {
+      if (this.hitbox.overlaps(spike.hitbox)) spike.collide(this);
+    }
 
-      this.centercamera(camera);
+    // Check for coffee
+    if (this.hitbox.overlaps(this.level.coffee.hitbox))
+      this.level.coffee.collide(this);
+    
+    if (this.position.y > this.level.deathY) this.dead = true;
+
+    this.centercamera(camera);
   }
 
   updatePosition () {
@@ -96,8 +101,20 @@ export class Player implements Renderable {
     this.hitbox = new HitBox(this.position, this.width, this.height);
   }
 
-  getOverlapping () : Platform[] {
-    return this.level.platforms.filter(p => this.hitbox.overlaps(p));
+  getVisiblePlatforms (camera: Camera) {
+    const cameraHitbox = new HitBox(
+      {
+        x: camera.center.x - camera.width / 2,
+        y: camera.center.y - camera.height / 2
+      },
+      camera.width, camera.height
+    );
+
+    return this.level.platforms.filter(p => cameraHitbox.overlaps(p));
+  }
+
+  getOverlapping (group?: Platform[]) : Platform[] {
+    return (group || this.level.platforms).filter(p => this.hitbox.overlaps(p));
   }
 
   getGround (possibleGround: Platform[]) : Platform | undefined {

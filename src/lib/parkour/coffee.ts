@@ -29,7 +29,7 @@ export class Coffee implements Renderable {
     const level = Level.levels.find(l => l.id == this.redirectTo);
     if (level) {
       player.level = level;
-      player.position = level.startPos;
+      player.position = { ...level.startPos };
       player.velocity = { x: 0, y: 0 }
       player.direction = 0;
       player.sliding = false;
