@@ -149,48 +149,10 @@ export class Game {
 
     setInterval(() => {
       this.currenttime = Date.now() - this.starttime;
-      this.player.move(this.directions);
-
-      // Tick
-      this.player.position.x += this.player.velocity.x;
-      this.player.position.y += this.player.velocity.y;
-
-      this.player.updatePosition();
-
-      this.player.gravitate();
-      this.player.doFriction();
-
-      // For testing
-      // if (this.directions.up) this.player.position.y --;
-      // if (this.directions.down) this.player.position.y ++;
-      // if (this.directions.left) this.player.position.x --;
-      // if (this.directions.right) this.player.position.x ++;
-
-      this.player.updatePosition()
-
-      const overlapping = this.player.getOverlapping();
       
-      this.player.collide(overlapping);
-      this.player.adjustForGround(this.directions);
-      this.player.updatePosition();
-      
-      // Chack for bouncepads
-      for (let bouncepad of this.player.level.bouncepads) {
-        if (this.player.hitbox.overlaps(bouncepad.hitbox)) bouncepad.collide(this.player);
-      }
+      this.player.tick(this.directions, this.camera);
 
-      for (let spike of this.player.level.spikes) {
-        if (this.player.hitbox.overlaps(spike.hitbox)) spike.collide(this.player);
-      }
-
-      // Check for coffee
-      if (this.player.hitbox.overlaps(this.player.level.coffee.hitbox))
-        this.player.level.coffee.collide(this.player);
-      
-      if (this.player.position.y > 96) this.player.dead = true;
       if (!this.player.dead) deadsplash.hide();
-
-      this.player.centercamera(this.camera);
 
       if (this.player.dead) {
         if (!deadsplash.showing) deadsplash.show();

@@ -42,6 +42,50 @@ export class Player implements Renderable {
     this.hitbox = new HitBox(this.position, normalWidth, normalHeight);
   }
 
+  tick (directionkeys: { up: boolean, down: boolean, left: boolean, right: boolean }, camera: Camera) {
+    this.move(directionkeys);
+
+      // Tick
+      this.position.x += this.velocity.x;
+      this.position.y += this.velocity.y;
+
+      this.updatePosition();
+
+      this.gravitate();
+      this.doFriction();
+
+      // For testing
+      // if (this.directions.up) this.position.y --;
+      // if (this.directions.down) this.position.y ++;
+      // if (this.directions.left) this.position.x --;
+      // if (this.directions.right) this.position.x ++;
+
+      this.updatePosition()
+
+      const overlapping = this.getOverlapping();
+      
+      this.collide(overlapping);
+      this.adjustForGround(directionkeys);
+      this.updatePosition();
+      
+      // Chack for bouncepads
+      for (let bouncepad of this.level.bouncepads) {
+        if (this.hitbox.overlaps(bouncepad.hitbox)) bouncepad.collide(this);
+      }
+
+      for (let spike of this.level.spikes) {
+        if (this.hitbox.overlaps(spike.hitbox)) spike.collide(this);
+      }
+
+      // Check for coffee
+      if (this.hitbox.overlaps(this.level.coffee.hitbox))
+        this.level.coffee.collide(this);
+      
+      if (this.position.y > 96) this.dead = true;
+
+      this.centercamera(camera);
+  }
+
   updatePosition () {
     if (this.ground) {
       this.position = {x: this.position.x, y: this.ground.position.y - (this.sliding ? slideHeight : normalHeight)};

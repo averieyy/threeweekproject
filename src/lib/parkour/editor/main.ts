@@ -11,6 +11,7 @@ const EDITORWIDTH = 200;
 
 import Trash from '$lib/assets/parkour/trash.png';
 import { HitBox } from "../hitbox";
+import { Player } from "../player";
 
 const trash = new Image();
 trash.src = Trash;
@@ -26,6 +27,8 @@ export class Editor {
 
   camera: Camera;
 
+  player: Player;
+
   level: Level;
 
   directions: { up: boolean, down: boolean, left: boolean, right: boolean } = {up: false, down: false, left: false, right: false };
@@ -34,6 +37,7 @@ export class Editor {
   dragend: Vector2 | undefined;
 
   drawing: boolean = false;
+  playing: boolean = false;
 
   mode: 'spike' | 'platform' | 'bouncepad' | 'delete' = 'platform';
 
@@ -56,12 +60,24 @@ export class Editor {
     if (!bctx) throw Error('Could not get buffer canvas context');
     this.bufferctx = bctx;
 
-    this.level =  new Level(-1,'EDITING LEVEL', [], { x: 0, y: 0 }, [], [], new Coffee({ x: 20, y: 0 }, -1), 0.175, []);
+    const level = this.loadFromLocalStorage();
+    this.level = level || new Level(-1,'EDITING LEVEL', [], { x: 0, y: 0 }, [], [], new Coffee({ x: 20, y: 0 }, -1), 0.175, []);
 
-    this.camera = new Camera(this.level.startPos, this.canvaswidth, this.canvasheight);
+    this.camera = new Camera({ ...this.level.startPos }, this.canvaswidth, this.canvasheight);
+    this.player = new Player('Editing', this.level);
 
     this.keybinds();
     this.mainloop();
+  }
+
+  updateLocalStorage() {
+    localStorage.setItem('level', JSON.stringify(this.level.toJSON()));
+  }
+
+  loadFromLocalStorage() {
+    const levelJSON = localStorage.getItem('level');
+    if (!levelJSON) return;
+    return Level.fromJSON(-1, JSON.parse(levelJSON));
   }
 
   deleteFromLevel () {
@@ -117,6 +133,7 @@ export class Editor {
         case 'b': this.mode = 'bouncepad'; break;
         case 'd': this.mode = 'delete'; break;
         case 'Enter':
+          if (this.playing) break;
           switch (this.mode) {
             case 'delete': this.deleteFromLevel(); break;
             case 'bouncepad': 
@@ -138,10 +155,15 @@ export class Editor {
                 const endx = Math.max(this.dragstart.x, this.dragend.x);
                 const endy = Math.max(this.dragstart.y, this.dragend.y);
     
+                const width = Math.round((endx - startx) / 8) * 8;
+                const height = Math.round((endy - starty) / 8) * 8;
+
                 if (this.mode == 'platform')
-                  this.level.platforms.push(new Platform({x: startx, y: starty}, endx - startx, endy - starty));
+                  this.level.platforms.push(new Platform({x: startx, y: starty}, width, height));
                 if (this.mode == 'spike')
-                  this.level.spikes.push(new Spikes({x: startx, y: starty - 4}, Math.round((endx - startx) / 8) * 8));
+                  this.level.spikes.push(new Spikes({x: startx, y: starty - 4}, width));
+              
+                this.updateLocalStorage();
               }
               else {
                 
@@ -157,6 +179,16 @@ export class Editor {
           break;
         case 'j':
           navigator.clipboard.writeText(JSON.stringify(this.level.toJSON()));
+          break;
+        case 'c':
+          if (this.playing) break;
+          this.level.coffee.pos = {
+            x: Math.floor(this.camera.center.x / 8) * 8,
+            y: Math.floor(this.camera.center.y / 8) * 8,
+          }
+          break;
+        case 'q':
+          this.playing = !this.playing;
           break;
       }
     });
@@ -185,17 +217,25 @@ export class Editor {
   }
 
   tick () {
-    if (this.drawing) {
-      this.dragend = {
-        x: Math.round(this.camera.center.x / 8) * 8,
-        y: Math.round(this.camera.center.y / 8) * 8
-      };
-    }
+    if (this.playing) {
+      this.player.tick(this.directions, this.camera);
 
-    if (this.directions.left) this.camera.center.x --;
-    if (this.directions.right) this.camera.center.x ++;
-    if (this.directions.up) this.camera.center.y --;
-    if (this.directions.down) this.camera.center.y ++;
+      if (this.player.dead) {
+        this.player = new Player('Editing', this.level);
+      }
+    } else {
+      if (this.drawing) {
+        this.dragend = {
+          x: Math.round(this.camera.center.x / 8) * 8,
+          y: Math.round(this.camera.center.y / 8) * 8
+        };
+      }
+  
+      if (this.directions.left) this.camera.center.x --;
+      if (this.directions.right) this.camera.center.x ++;
+      if (this.directions.up) this.camera.center.y --;
+      if (this.directions.down) this.camera.center.y ++;
+    }
   }
 
   render () {
@@ -219,32 +259,47 @@ export class Editor {
     
     this.level.coffee.render(this.bufferctx, this.camera);
 
-    if (this.drawing && this.dragstart) { // Dragstart included for safe typing
+    this.player.render(this.bufferctx, this.camera);
 
-      const startx = Math.min(this.dragstart.x, Math.round(this.camera.center.x / 8) * 8);
-      const starty = Math.min(this.dragstart.y, Math.round(this.camera.center.y / 8) * 8);
-      const endx = Math.max(this.dragstart.x, Math.round(this.camera.center.x / 8) * 8);
-      const endy = Math.max(this.dragstart.y, Math.round(this.camera.center.y / 8) * 8);
+    if (!this.playing) {
+  
+      if (this.drawing && this.dragstart) { // Dragstart included for safe typing
+  
+        const startx = Math.min(this.dragstart.x, Math.round(this.camera.center.x / 8) * 8);
+        const starty = Math.min(this.dragstart.y, Math.round(this.camera.center.y / 8) * 8);
+        const endx = Math.max(this.dragstart.x, Math.round(this.camera.center.x / 8) * 8);
+        const endy = Math.max(this.dragstart.y, Math.round(this.camera.center.y / 8) * 8);
+  
+        (
+          this.mode == 'platform'
+          ? new Platform(
+            {
+              x: startx,
+              y: starty
+            },
+            endx - startx,
+            endy - starty
+          )
+          : new Spikes(
+            {
+              x: startx,
+              y: starty - 4
+            },
+            endx - startx
+          )
+        )
+        .render(
+          this.bufferctx,
+          this.camera
+        );
+      }
 
-      (this.mode == 'platform' ? new Platform(
-        {
-          x: startx,
-          y: starty
-        },
-        endx - startx,
-        endy - starty
-      ) : new Spikes({x: startx, y: starty}, endx - startx))
-      .render(
-        this.bufferctx,
-        this.camera
-      );
+      this.bufferctx.fillStyle = '#4c566a';
+      this.bufferctx.fillRect(EDITORWIDTH / 2 - 1, EDITORHEIGHT / 2 - 1, 2, 2);
     }
 
     this.bufferctx.fillStyle = '#4c566a';
     this.bufferctx.fillRect(1,1,12,12);
-
-    this.bufferctx.fillStyle = '#4c566a';
-    this.bufferctx.fillRect(EDITORWIDTH / 2, EDITORHEIGHT / 2, 1, 1);
 
     this.bufferctx.drawImage(
       this.mode == 'platform' ? platformimg
