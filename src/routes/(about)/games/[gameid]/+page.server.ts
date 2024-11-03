@@ -16,10 +16,19 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
 
   if (!game) error(404);
 
-  const gameleaderboard = leaderboard
-    .filter(e => e.gameid == gameid)
-    .map(e => {return { points: e.points, user: users.find(u => u.id == e.userid)?.username }})
-    .sort((l1, l2) => l2.points - l1.points);
+  let gameleaderboard: {gameid: number, points: number, user: string}[] = [];
+
+  for (const entry of leaderboard) {
+    const user = users.find(u => u.id == entry.userid);
+
+    if (entry.gameid == game.id) {
+      gameleaderboard.push({
+        gameid: entry.gameid,
+        points: entry.points,
+        user: user?.username || 'BlondePterodactyl_1997', // Random name
+      });
+    }
+  }
   
   // Get if the user is logged in
   let loggedin = false;
@@ -30,9 +39,14 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
   if (user) loggedin = true;
 
   return {
-    name: game.name,
+    game: {
+      id: game.id,
+      name: game.name,
+      speedrunning: game.speedrunning,
+      description: game.description,
+      url: game.url
+    },
     leaderboard: gameleaderboard,
-    url: game.url,
     loggedin
   };
 };
