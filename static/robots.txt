@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /login
+Disallow: /signup
+Disallow: /verify2fa
+Disallow: /api/
+Disallow: /play/

@@ -30,12 +30,14 @@
       <h3>Leaderboard</h3>
       <Leaderboard game={{ ...data.game }} entries={data.leaderboard} />
     </section>
-    <div class="center">
-      <a href={data.game.url} class="playbtn">
-        <Icon icon="play_arrow" />
-        Play {data.name}
-      </a>
-    </div>
+    {#if data.loggedin}
+      <div class="center">
+        <a href={data.game.url} class="playbtn">
+          <Icon icon="play_arrow" />
+          Play {data.name}
+        </a>
+      </div>
+    {/if}
   </article>
 </main>
 
