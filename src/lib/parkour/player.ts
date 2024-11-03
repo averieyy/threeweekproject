@@ -69,11 +69,9 @@ export class Player implements Renderable {
     this.updatePosition();
 
     this.visiblePlatforms = this.getVisiblePlatforms(camera);
-
-    const allOverlapping = this.getOverlapping();
     // const overlapping = allOverlapping.filter(p => this.visiblePlatforms.includes(p));
     
-    this.collide(allOverlapping);
+    this.collide(this.visiblePlatforms);
     this.adjustForGround(directionkeys);
     this.updatePosition();
 
