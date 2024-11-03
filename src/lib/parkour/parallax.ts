@@ -46,8 +46,8 @@ export class Parallax implements Renderable {
     // console.log(Math.floor(playerx / this.levelwidth * 400 - 100),);
 
     ctx.drawImage(layers[2],
-      Math.floor(playerx * -100),
-      Math.floor(playery * -75)
+      Math.floor(playerx * -50 - 100),
+      Math.floor(playery * -37.5 - 75)
     );
 
     ctx.drawImage(layers[1],
