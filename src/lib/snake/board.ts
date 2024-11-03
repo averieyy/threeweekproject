@@ -74,29 +74,29 @@ export class Board {
 
   render(ctx: OffscreenCanvasRenderingContext2D) {
 
-    ctx.fillStyle = '#666';
+    ctx.fillStyle = '#2e3440';
     for (let y = 0; y < this.size; y++) {
       for (let x = 0; x < this.size; x++) {
         if ((x + y) % 2 == 0) ctx.fillRect(x,y,1,1);
       }
     }
 
-    ctx.fillStyle = '#888';
+    ctx.fillStyle = '#3b4252';
     for (let y = 0; y < this.size; y++) {
       for (let x = 0; x < this.size; x++) {
         if ((x + y) % 2 == 1) ctx.fillRect(x,y,1,1);
       }
     }
 
-    ctx.fillStyle = '#474';
+    ctx.fillStyle = '#5e81ac';
     for (let s of this.snake) {
       ctx.fillRect(...s, 1, 1);
     }
 
-    ctx.fillStyle = '#4e4';
+    ctx.fillStyle = '#81a1c1';
     ctx.fillRect(...this.head, 1, 1);
 
-    ctx.fillStyle = '#e44';
+    ctx.fillStyle = '#bf616a';
     ctx.fillRect(...this.applepos, 1, 1);
   }
 }
