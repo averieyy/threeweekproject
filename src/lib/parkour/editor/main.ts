@@ -64,7 +64,7 @@ export class Editor {
     this.level = level || new Level(-1,'EDITING LEVEL', [], { x: 0, y: 0 }, [], [], new Coffee({ x: 20, y: 0 }, -1), 0.175, []);
 
     this.camera = new Camera({ ...this.level.startPos }, this.canvaswidth, this.canvasheight);
-    this.player = new Player('Editing', this.level);
+    this.player = new Player('Editing', this.level.startPos);
 
     this.keybinds();
     this.mainloop();
@@ -218,10 +218,10 @@ export class Editor {
 
   tick () {
     if (this.playing) {
-      this.player.tick(this.directions, this.camera);
+      this.player.tick(this.directions, this.level, this.camera);
 
       if (this.player.dead) {
-        this.player = new Player('Editing', this.level);
+        this.player = new Player('Editing', this.level.startPos);
       }
     } else {
       if (this.drawing) {

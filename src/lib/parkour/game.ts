@@ -27,6 +27,8 @@ export class Game {
 
   updatedHighscore: boolean = false;
 
+  currentlevel: Level;
+
   directions: { up: boolean, down: boolean, left: boolean, right: boolean } = {up: false, down: false, left: false, right: false };
 
   constructor (canvas: HTMLCanvasElement) {
@@ -43,7 +45,9 @@ export class Game {
     if (!ctxbuffer) throw Error('Could not get offscreen context buffer');
     this.bufferctx = ctxbuffer;
 
-    this.player = new Player('test', Level.levels[0]);
+    this.currentlevel = Level.levels[0];
+    
+    this.player = new Player('test', this.currentlevel.startPos);
     this.camera = new Camera(this.player.position, 200, 150);
     this.player.centercamera(this.camera);
     
@@ -61,7 +65,7 @@ export class Game {
   keybinds () {
     document.addEventListener('keydown', (ev) => {
       if (this.player.dead && [' ', 'Enter'].includes(ev.key)) {
-        this.player.ressurect();
+        this.player.ressurect(this.currentlevel);
         return;
       }
 
@@ -96,9 +100,9 @@ export class Game {
   render() {
     this.bufferctx.clearRect(0,0,this.canvaswidth, this.canvasheight);
 
-    this.player.level.parallax.render(this.bufferctx, this.camera);
+    this.currentlevel.parallax.render(this.bufferctx, this.camera);
 
-    for (let spike of this.player.level.spikes) {
+    for (let spike of this.currentlevel.spikes) {
       spike.render(this.bufferctx, this.camera);
     }
 
@@ -106,17 +110,17 @@ export class Game {
       platform.render(this.bufferctx, this.camera);
     }
 
-    for (let bouncepad of this.player.level.bouncepads) {
+    for (let bouncepad of this.currentlevel.bouncepads) {
       bouncepad.render(this.bufferctx, this.camera);
     }
 
-    for (let infoplaque of this.player.level.plaques) {
+    for (let infoplaque of this.currentlevel.plaques) {
       infoplaque.render(this.bufferctx, this.camera);
     }
     
     this.player.render(this.bufferctx, this.camera);
 
-    this.player.level.coffee.render(this.bufferctx, this.camera);
+    this.currentlevel.coffee.render(this.bufferctx, this.camera);
 
     deadsplash.render(this.bufferctx);
     winsplash.render(this.bufferctx);
@@ -143,28 +147,30 @@ export class Game {
   }
 
   mainloop () {
-
     setInterval(() => {
-        if (this.player.won) {
-          if (!this.updatedHighscore) {
-            fetch('/api/leaderboard', {method: 'POST', body: JSON.stringify({gameid: 0, points: this.currenttime})});
-            
-            this.updatedHighscore = true;
-          }
-
-          if (!winsplash.showing) winsplash.show();
+      if (this.player.won) {
+        if (!this.updatedHighscore) {
+          fetch('/api/leaderboard', {method: 'POST', body: JSON.stringify({gameid: 0, points: this.currenttime})});
           
-          winsplash.update();
+          this.updatedHighscore = true;
         }
+
+        if (!winsplash.showing) winsplash.show();
+        
+        winsplash.update();
+      }
       else {
         this.currenttime = Date.now() - this.starttime;
-        this.player.tick(this.directions, this.camera);
+        this.player.tick(this.directions, this.currentlevel, this.camera);
   
         if (!this.player.dead) deadsplash.hide();
   
         if (this.player.dead) {
           if (!deadsplash.showing) deadsplash.show();
         }
+
+        if (this.player.hitbox.overlaps(this.currentlevel.coffee.hitbox))
+          this.currentlevel.coffee.collide(this.player, (l: Level) => this.currentlevel = l);
   
         deadsplash.update();
       }

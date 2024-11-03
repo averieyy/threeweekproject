@@ -15,7 +15,6 @@ export class Player implements Renderable {
   name : string;
   velocity: Vector2 = { x: 0, y: 0 };
   position: Vector2;
-  level: Level;
   sliding: boolean = false;
 
   ground?: Platform;
@@ -37,16 +36,15 @@ export class Player implements Renderable {
 
   visiblePlatforms: Platform[] = [];
 
-  constructor (name: string, level: Level) {
+  constructor (name: string, position: Vector2) {
     this.name = name;
-    this.level = level;
 
-    this.position = level.startPos;
+    this.position = position;
 
-    this.hitbox = new HitBox(this.position, normalWidth, normalHeight);
+    this.hitbox = new HitBox(position, normalWidth, normalHeight);
   }
 
-  tick (directionkeys: { up: boolean, down: boolean, left: boolean, right: boolean }, camera: Camera) {
+  tick (directionkeys: { up: boolean, down: boolean, left: boolean, right: boolean }, level: Level, camera: Camera) {
     this.move(directionkeys);
 
     // Tick
@@ -57,7 +55,7 @@ export class Player implements Renderable {
 
     this.updatePosition();
     
-    this.gravitate();
+    this.gravitate(level);
 
 
     // For testing
@@ -68,7 +66,7 @@ export class Player implements Renderable {
 
     this.updatePosition();
 
-    this.visiblePlatforms = this.getVisiblePlatforms(camera);
+    this.visiblePlatforms = this.getVisiblePlatforms(camera, level.platforms);
     // const overlapping = allOverlapping.filter(p => this.visiblePlatforms.includes(p));
     
     this.collide(this.visiblePlatforms);
@@ -78,19 +76,15 @@ export class Player implements Renderable {
     this.doFriction();
     
     // Chack for bouncepads
-    for (let bouncepad of this.level.bouncepads) {
+    for (let bouncepad of level.bouncepads) {
       if (this.hitbox.overlaps(bouncepad.hitbox)) bouncepad.collide(this);
     }
 
-    for (let spike of this.level.spikes) {
+    for (let spike of level.spikes) {
       if (this.hitbox.overlaps(spike.hitbox)) spike.collide(this);
     }
-
-    // Check for coffee
-    if (this.hitbox.overlaps(this.level.coffee.hitbox))
-      this.level.coffee.collide(this);
     
-    if (this.position.y > this.level.deathY) this.dead = true;
+    if (this.position.y > level.deathY) this.dead = true;
 
     this.centercamera(camera);
   }
@@ -105,7 +99,7 @@ export class Player implements Renderable {
     this.hitbox = new HitBox(this.position, this.width, this.height);
   }
 
-  getVisiblePlatforms (camera: Camera) {
+  getVisiblePlatforms (camera: Camera, platforms: Platform[]) {
     const cameraHitbox = new HitBox(
       {
         x: camera.center.x - camera.width / 2,
@@ -114,11 +108,11 @@ export class Player implements Renderable {
       camera.width, camera.height
     );
 
-    return this.level.platforms.filter(p => cameraHitbox.overlaps(p));
+    return platforms.filter(p => cameraHitbox.overlaps(p));
   }
 
-  getOverlapping (group?: Platform[]) : Platform[] {
-    return (group || this.level.platforms).filter(p => this.hitbox.overlaps(p));
+  getOverlapping (group: Platform[]) : Platform[] {
+    return (group).filter(p => this.hitbox.overlaps(p));
   }
 
   getGround (possibleGround: Platform[]) : Platform | undefined {
@@ -232,8 +226,8 @@ export class Player implements Renderable {
     if (!this.ground) this.animationframe = 2;
   }
 
-  gravitate () {
-    this.velocity.y += this.level.gravity * (this.sliding && Math.abs(this.velocity.x) > 1.5 ? 1.5 : 1);
+  gravitate (level: Level) {
+    this.velocity.y += level.gravity * (this.sliding && Math.abs(this.velocity.x) > 1.5 ? 1.5 : 1);
     if (this.sliding && this.velocity.y > 5) this.velocity.y = 5;
     else if (this.velocity.y > 4) this.velocity.y = 4;
   }
@@ -252,11 +246,11 @@ export class Player implements Renderable {
     }
   }
   
-  ressurect () {
+  ressurect (level: Level) {
     this.dead = false;
 
     // Reset everything
-    this.position = this.level.startPos;
+    this.position = level.startPos;
     this.velocity = { x: 0, y: 0 }
 
     this.direction = 0;
