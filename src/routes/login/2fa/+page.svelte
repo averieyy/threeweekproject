@@ -5,8 +5,12 @@
   const redirectUrl : string = $page.url.searchParams.get('redirect') || '/login';
 </script>
 
+<svelte:head>
+  <title>2fa</title>
+</svelte:head>
+
 <main>
-  <Twofa />
+  <Twofa verify={false} />
 </main>
 
 <style>

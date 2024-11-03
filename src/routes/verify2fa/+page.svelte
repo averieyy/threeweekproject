@@ -34,6 +34,10 @@
   <Twofa verify />
 </main>
 
+<svelte:head>
+  <title>Verify 2fa</title>
+</svelte:head>
+
 <style>
   main {
     display: flex;

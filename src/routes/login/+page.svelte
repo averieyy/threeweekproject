@@ -32,6 +32,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Log in</title>
+</svelte:head>
+
 <main>
   <Loginform submit={submit} title="Log in" errorMessage={errorMessage} />
   <a href={`/signup?redirect=${redirectURL || ''}`}>Don't have an account? Sign up</a>

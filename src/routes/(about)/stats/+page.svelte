@@ -8,6 +8,10 @@
   const leaderboard : {[key: number] : {gameid: number, points: number, user: string}[]} = $page.data.leaderboards;
 </script>
 
+<svelte:head>
+  <title>Statistics</title>
+</svelte:head>
+
 <main>
   <div class="outerarticle">
     <div class="article">

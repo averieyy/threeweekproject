@@ -4,6 +4,10 @@
   const games = $page.data.games;
 </script>
 
+<svelte:head>
+  <title>Games</title>
+</svelte:head>
+
 <main>
   <div class="maincolumn">
     <div class="gameparent">

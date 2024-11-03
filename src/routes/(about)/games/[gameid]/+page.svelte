@@ -5,6 +5,10 @@
   const data = $page.data;
 </script>
 
+<svelte:head>
+  <title>{data.name}</title>
+</svelte:head>
+
 <main>
   <div class="name">
     <h2>{data.name}</h2>
