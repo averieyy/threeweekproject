@@ -34,8 +34,6 @@ export class Player implements Renderable {
 
   hitbouncepad: boolean = false;
 
-  visiblePlatforms: Platform[] = [];
-
   constructor (name: string, position: Vector2) {
     this.name = name;
 
@@ -65,11 +63,9 @@ export class Player implements Renderable {
     // if (this.directions.right) this.position.x ++;
 
     this.updatePosition();
-
-    this.visiblePlatforms = this.getVisiblePlatforms(camera, level.platforms);
     // const overlapping = allOverlapping.filter(p => this.visiblePlatforms.includes(p));
     
-    this.collide(this.visiblePlatforms);
+    this.collide(level.visiblePlatforms);
     this.adjustForGround(directionkeys);
     this.updatePosition();
 
@@ -97,18 +93,6 @@ export class Player implements Renderable {
     this.height = this.sliding ? slideHeight : normalHeight;
 
     this.hitbox = new HitBox(this.position, this.width, this.height);
-  }
-
-  getVisiblePlatforms (camera: Camera, platforms: Platform[]) {
-    const cameraHitbox = new HitBox(
-      {
-        x: camera.center.x - camera.width / 2,
-        y: camera.center.y - camera.height / 2
-      },
-      camera.width, camera.height
-    );
-
-    return platforms.filter(p => cameraHitbox.overlaps(p));
   }
 
   getOverlapping (group: Platform[]) : Platform[] {

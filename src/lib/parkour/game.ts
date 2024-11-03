@@ -4,6 +4,7 @@ import { Level } from "./level";
 import { Player } from "./player";
 import { deadsplash, winsplash } from "./splash";
 import { toTimeString } from "../time";
+import { LevelAnimation } from "./levelanimation";
 
 Level.loadLevels();
 
@@ -30,6 +31,8 @@ export class Game {
   currentlevel: Level;
 
   directions: { up: boolean, down: boolean, left: boolean, right: boolean } = {up: false, down: false, left: false, right: false };
+
+  levelAnimation?: LevelAnimation;
 
   constructor (canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -106,7 +109,7 @@ export class Game {
       spike.render(this.bufferctx, this.camera);
     }
 
-    for (let platform of this.player.visiblePlatforms) {
+    for (let platform of this.currentlevel.visiblePlatforms) {
       platform.render(this.bufferctx, this.camera);
     }
 
@@ -124,6 +127,8 @@ export class Game {
 
     deadsplash.render(this.bufferctx);
     winsplash.render(this.bufferctx);
+
+    this.levelAnimation?.render(this.bufferctx)
 
     // Render time
     const textTime = toTimeString(this.currenttime);
@@ -160,17 +165,40 @@ export class Game {
         winsplash.update();
       }
       else {
+
+        this.currentlevel.updateVisiblePlatforms(this.camera);
+
         this.currenttime = Date.now() - this.starttime;
-        this.player.tick(this.directions, this.currentlevel, this.camera);
-  
+
+        if (!this.levelAnimation)
+          this.player.tick(this.directions, this.currentlevel, this.camera);
+        else this.levelAnimation.update();
+
         if (!this.player.dead) deadsplash.hide();
   
         if (this.player.dead) {
           if (!deadsplash.showing) deadsplash.show();
         }
 
-        if (this.player.hitbox.overlaps(this.currentlevel.coffee.hitbox))
-          this.currentlevel.coffee.collide(this.player, (l: Level) => this.currentlevel = l);
+        if (this.player.hitbox.overlaps(this.currentlevel.coffee.hitbox) && !this.levelAnimation) {
+          const newlevel = this.currentlevel.coffee.getNewLevel();
+
+          if (!newlevel) {
+            this.player.won = true;
+          }
+          else {
+            this.levelAnimation = new LevelAnimation(this.camera, () => {
+              // Halfway
+              this.currentlevel = newlevel;
+              this.player.position = newlevel.startPos;
+              this.player.sliding = false;
+              this.player.direction = 0;
+            }, () => {
+              // Done
+              this.levelAnimation = undefined;
+            }, this.currentlevel, newlevel);
+          }
+        }
   
         deadsplash.update();
       }

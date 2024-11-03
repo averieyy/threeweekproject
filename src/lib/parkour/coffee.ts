@@ -25,17 +25,12 @@ export class Coffee implements Renderable {
     this.redirectTo = redirect;
   }
 
-  collide (player: Player, setLevel: (l: Level) => void) {
-    if (this.redirectTo === -1) {
-      player.won = true;
-    }
+  getNewLevel (): Level | null {
     const level = Level.levels.find(l => l.id == this.redirectTo);
     if (level) {
-      setLevel(level);
-      player.position = { ...level.startPos };
-      player.velocity = { x: 0, y: 0 }
-      player.direction = 0;
+      return level;
     }
+    return null;
   }
 
   render (ctx: OffscreenCanvasRenderingContext2D, camera: Camera) {

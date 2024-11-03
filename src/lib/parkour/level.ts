@@ -11,6 +11,8 @@ import airbounce from '$lib/parkour/levels/airbounce.json';
 import hops from '$lib/parkour/levels/hops.json';
 import longslide from '$lib/parkour/levels/longslide.json';
 import { Parallax } from "./parallax";
+import type { Camera } from "./camera";
+import { HitBox } from "./hitbox";
 
 interface jsonLevel {
   name: string,
@@ -43,6 +45,8 @@ export class Level {
   
   parallax: Parallax;
 
+  visiblePlatforms: Platform[] = [];
+
   constructor (id: number, name: string, platforms: Platform[], startPos: Vector2, plaques: InfoPlaque[] = [], bouncepads: BouncePad[], coffee: Coffee, gravity: number, spikes: Spikes[]) {
     this.name = name;
     this.id = id;
@@ -59,6 +63,18 @@ export class Level {
     else this.deathY = 1;
 
     this.parallax = new Parallax(this.platforms);
+  }
+
+  updateVisiblePlatforms(camera: Camera) {
+    const cameraHitbox = new HitBox(
+      {
+        x: camera.center.x - camera.width / 2,
+        y: camera.center.y - camera.height / 2
+      },
+      camera.width, camera.height
+    );
+
+    this.visiblePlatforms = this.platforms.filter(p => cameraHitbox.overlaps(p));
   }
 
   static fromJSON (id: number, json: jsonLevel) : Level {
