@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import type { PageData } from "./$types";
 
-  const games = $page.data.games;
+  const { data }: {data: PageData} = $props();
 </script>
 
 <svelte:head>
@@ -12,7 +12,7 @@
   <div class="maincolumn">
     <div class="gameparent">
       <div class="games">
-        {#each games as game}
+        {#each data.games as game}
           <a href={`/games/${game.id}`} class="gametile">
             <span>{game.name}</span>
           </a>

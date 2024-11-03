@@ -32,11 +32,13 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
   
   // Get if the user is logged in
   let loggedin = false;
+
   const token = cookies.get('token');
-  if (!token) return;
 
   const user = await getUserFromToken(token);
   if (user) loggedin = true;
+
+  console.log(game, loggedin);
 
   return {
     game: {

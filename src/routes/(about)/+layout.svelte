@@ -1,9 +1,10 @@
-<script>
-  import { page } from '$app/stores';
+<script lang="ts">
   import Header from '$lib/components/header.svelte';
+  import type { Snippet } from 'svelte';
+  import type { LayoutData } from './$types';
 
-  let user = $page.data.user;
+  const { data, children }: { data : LayoutData, children: Snippet } = $props();
 </script>
 
-<Header user={user} />
-<slot/>
+<Header user={data.user} />
+{@render children()}

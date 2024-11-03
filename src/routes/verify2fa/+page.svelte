@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { page } from "$app/stores";
   import { Authentication } from "$lib/auth/authservice";
-    import Twofa from "$lib/components/twofa.svelte";
-  import { Secret, TOTP } from "otpauth";
+  import Twofa from "$lib/components/twofa.svelte";
+  import { Secret } from "otpauth";
   import { toDataURL } from "qrcode";
   import { onMount } from "svelte";
+  import type { PageData } from "./$types";
 
-  const token = $page.data.totpsecret;
+  const { data } : { data: PageData } = $props();
+  const token = data.totpsecret;
 
   let justshowcode: boolean = $state(false);
 
   const toggleShowCode = () => justshowcode = !justshowcode; 
 
   const uri = Authentication.generateTOTPObject(Secret.fromBase32(token)).toString();
-
   let qrcode: string = $state('');
 
   onMount(async () => {

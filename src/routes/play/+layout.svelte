@@ -1,12 +1,14 @@
-<script>
-    import Icon from "$lib/components/icon.svelte";
+<script lang="ts">
+  import Icon from "$lib/components/icon.svelte";
+  import type { Snippet } from "svelte";
 
+  const { children } : { children: Snippet } = $props();
 </script>
 
 <div class="everything">
   <a href="/"><Icon icon='arrow_back'/> Go back</a>
   <main>
-    <slot />
+    {@render children()}
   </main>
 </div>
 

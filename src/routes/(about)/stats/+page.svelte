@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { page } from "$app/stores";
-  import Icon from "$lib/components/icon.svelte";
-    import Leaderboard from "$lib/components/leaderboard.svelte";
-    import { toTimeString } from "$lib/time";
+  import Leaderboard from "$lib/components/leaderboard.svelte";
+  import type { PageData } from "./$types";
 
-  const svgContent = $page.data.svgContent;
-  const games: {id: number, name: string, colour: string, speedrunning: boolean}[] = $page.data.games;
-  const leaderboard : {[key: number] : {gameid: number, points: number, user: string}[]} = $page.data.leaderboards;
+  const { data } : { data: PageData } = $props();
+
+  const svgContent = data.svgContent;
+  const games = data.games;
+  const leaderboard = data.leaderboards;
 </script>
 
 <svelte:head>

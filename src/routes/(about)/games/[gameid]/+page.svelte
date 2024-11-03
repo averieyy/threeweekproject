@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { page } from "$app/stores";
   import Icon from "$lib/components/icon.svelte";
-    import Leaderboard from "$lib/components/leaderboard.svelte";
+  import Leaderboard from "$lib/components/leaderboard.svelte";
+  import type { PageData } from "./$types";
 
-  const data = $page.data;
+  const { data }: { data: PageData } = $props();
 </script>
 
 <svelte:head>
@@ -34,7 +34,7 @@
       <div class="center">
         <a href={data.game.url} class="playbtn">
           <Icon icon="play_arrow" />
-          Play {data.name}
+          Play {data.game.name}
         </a>
       </div>
     {/if}

@@ -193,6 +193,8 @@ export class Game {
               this.player.position = newlevel.startPos;
               this.player.sliding = false;
               this.player.direction = 0;
+              this.player.velocity = { x: 0, y: 0 };
+              this.player.animationframe = 0;
             }, () => {
               // Done
               this.levelAnimation = undefined;

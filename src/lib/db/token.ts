@@ -24,7 +24,7 @@ export async function genToken() : Promise<string> {
   return token;
 }
 
-export async function getUserFromToken (token: string, allowUnauthorized=false): Promise<User | null> {
+export async function getUserFromToken (token?: string, allowUnauthorized=false): Promise<User | null> {
   const database = await getDatabase();
 
   const { tokens, users } = database.data;
