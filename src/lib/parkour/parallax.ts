@@ -26,6 +26,18 @@ export class Parallax implements Renderable {
   levelheight: number;
 
   constructor (platforms: Platform[]) {
+    if (platforms.length == 0) {
+      this.minx = 0;
+      this.miny = 0;
+      this.maxx = 0;
+      this.maxy = 0;
+
+      this.levelwidth = 0;
+      this.levelheight = 0;
+
+      return;
+    };
+
     this.minx = platforms.sort((a, b) => a.position.x - b.position.x)[0].position.x - 100;
     this.miny = platforms.sort((a, b) => a.position.y - b.position.y)[0].position.y - 100;
     this.maxx = platforms.sort((a, b) => b.corners.lr.x - a.corners.lr.x)[0].corners.lr.x + 100;
@@ -33,8 +45,6 @@ export class Parallax implements Renderable {
 
     this.levelwidth = this.maxx - this.minx;
     this.levelheight = this.maxy - this.miny;
-
-    console.log(this.maxx);
   }
 
   render (ctx: OffscreenCanvasRenderingContext2D, camera: Camera) {

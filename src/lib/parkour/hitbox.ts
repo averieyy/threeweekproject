@@ -30,32 +30,18 @@ export class HitBox implements Renderable {
 
   overlaps(h: HitBox) : boolean {
     // Load to variable to minimise code wastage
-    const { ur, ul, lr, ll } = h.corners;
+    const { ur, ll } = h.corners;
+  
+    const cropped : { left: number, top: number, right: number, down: number } = { left: 0, top: 0, right: 0, down: 0 };
+    cropped.left = Math.max(this.corners.ll.x, ll.x);
+    cropped.top = Math.max(this.corners.ur.y, ur.y);
+    cropped.right = Math.min(this.corners.ur.x, ur.x);
+    cropped.down = Math.min(this.corners.ll.y, ll.y);
 
-    // The hitbox's four corners.
-    for (let c of [ this.corners.ul, this.corners.ur, this.corners.ll, this.corners.lr ]) {
-      // Only return true if one of the corners is in the other hitbox
-      if (c.x <= ll.x) continue;
-      if (c.x >= ur.x) continue;
-      if (c.y < ur.y) continue;
-      if (c.y > ll.y) continue;
-
-      return true;
-    }
-
-    // Dont need to write "this.corners" everywhere
-    const c = this.corners;
-
-    for (let h of [ ul, ur, lr, ll ]) {
-      if (h.x <= c.ll.x) continue;
-      if (h.x >= c.ur.x) continue;
-      if (h.y < c.ur.y) continue;
-      if (h.y > c.ll.y) continue;
-
-      return true;
-    }
-
-    return false;
+    const width = cropped.right - cropped.left;
+    const height = cropped.down - cropped.top;
+    
+    return width > 0 && height > 0;
   }
 
   render (ctx: OffscreenCanvasRenderingContext2D, camera: Camera): void {
