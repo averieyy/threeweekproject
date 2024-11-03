@@ -96,6 +96,8 @@ export class Game {
   render() {
     this.bufferctx.clearRect(0,0,this.canvaswidth, this.canvasheight);
 
+    this.player.level.parallax.render(this.bufferctx, this.camera);
+
     for (let spike of this.player.level.spikes) {
       spike.render(this.bufferctx, this.camera);
     }

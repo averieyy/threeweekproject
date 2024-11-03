@@ -10,6 +10,7 @@ import tutorial from '$lib/parkour/levels/tutorial.json';
 import airbounce from '$lib/parkour/levels/airbounce.json';
 import hops from '$lib/parkour/levels/hops.json';
 import longslide from '$lib/parkour/levels/longslide.json';
+import { Parallax } from "./parallax";
 
 interface jsonLevel {
   name: string,
@@ -39,6 +40,8 @@ export class Level {
   gravity: number;
 
   coffee: Coffee;
+  
+  parallax: Parallax;
 
   constructor (id: number, name: string, platforms: Platform[], startPos: Vector2, plaques: InfoPlaque[] = [], bouncepads: BouncePad[], coffee: Coffee, gravity: number, spikes: Spikes[]) {
     this.name = name;
@@ -54,6 +57,8 @@ export class Level {
     if (this.platforms.length > 0)
       this.deathY = this.platforms.sort((p1, p2) => p2.corners.ll.y - p1.corners.ll.y)[0].corners.ll.y;
     else this.deathY = 1;
+
+    this.parallax = new Parallax(this.platforms);
   }
 
   static fromJSON (id: number, json: jsonLevel) : Level {
