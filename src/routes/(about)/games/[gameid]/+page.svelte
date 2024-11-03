@@ -28,7 +28,7 @@
     </section>
     <section>
       <h3>Leaderboard</h3>
-      <Leaderboard game={{ ...data.game }} entries={data.leaderboard} />
+      <Leaderboard game={data.game} entries={data.leaderboard} />
     </section>
     {#if data.loggedin}
       <div class="center">
