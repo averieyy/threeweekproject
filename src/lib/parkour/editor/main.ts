@@ -218,6 +218,8 @@ export class Editor {
 
   tick () {
     if (this.playing) {
+      this.level.updateVisiblePlatforms(this.camera);
+      this.level.deathY = this.level.platforms.sort((a, b) => b.corners.ll.y - a.corners.ll.y)[0].corners.ll.y;
       this.player.tick(this.directions, this.level, this.camera);
 
       if (this.player.dead) {

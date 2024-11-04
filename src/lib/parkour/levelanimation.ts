@@ -52,8 +52,6 @@ export class LevelAnimation implements Renderable {
     // f(x) = cos(x), pi < x < 2pi
     this.yoffset = Math.cos(sineProgress) * 200;
 
-    console.log(this.yoffset);
-
     // Shift camera upwards
     this.camera.center.y += Math.sin(sineProgress) * Math.PI;
   }
