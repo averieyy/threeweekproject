@@ -4,10 +4,10 @@ import { getUserFromToken } from "$lib/db/token";
 
 export const load: PageServerLoad = async ({ cookies }) => {
   const token = cookies.get('token');
-  if (!token) redirect(302, '/login');
+  if (!token) redirect(302, '/login?redirect=/userpage');
 
   const user = await getUserFromToken(token);
-  if (!user) redirect(302, '/login');
+  if (!user) redirect(302, '/login?redirect=/userpage');
 
   return {
     user: {
