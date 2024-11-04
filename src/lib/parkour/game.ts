@@ -74,29 +74,29 @@ export class Game {
         return;
       }
 
-      switch(ev.key) {
-        case ' ':
-        case 'w':
+      switch(ev.code) {
+        case 'Space':
+        case 'KeyW':
         case 'ArrowUp': this.directions.up = true; break;
-        case 's':
+        case 'KeyS':
         case 'ArrowDown': this.directions.down = true; break;
-        case 'a':
+        case 'KeyA':
         case 'ArrowLeft': this.directions.left = true; break;
-        case 'd':
+        case 'KeyD':
         case 'ArrowRight': this.directions.right = true; break;
       }
     });
 
     document.addEventListener('keyup', (ev) => {
-      switch(ev.key) {
-        case ' ':
-        case 'w':
+      switch(ev.code) {
+        case 'Space':
+        case 'KeyW':
         case 'ArrowUp': this.directions.up = false; break;
-        case 's':
+        case 'KeyS':
         case 'ArrowDown': this.directions.down = false; break;
-        case 'a':
+        case 'KeyA':
         case 'ArrowLeft': this.directions.left = false; break;
-        case 'd':
+        case 'KeyD':
         case 'ArrowRight': this.directions.right = false; break;
       }
     });

@@ -122,16 +122,16 @@ export class Editor {
 
   keybinds () {
     document.addEventListener('keydown', (ev) => {
-      switch(ev.key) {
-        case ' ':
+      switch(ev.code) {
+        case 'Space':
         case 'ArrowUp': this.directions.up = true; break;
         case 'ArrowDown': this.directions.down = true; break;
         case 'ArrowLeft': this.directions.left = true; break;
         case 'ArrowRight': this.directions.right = true; break;
-        case 'p': this.mode = 'platform'; break;
-        case 's': this.mode = 'spike'; break;
-        case 'b': this.mode = 'bouncepad'; break;
-        case 'd': this.mode = 'delete'; break;
+        case 'KeyP': this.mode = 'platform'; break;
+        case 'KeyS': this.mode = 'spike'; break;
+        case 'KeyB': this.mode = 'bouncepad'; break;
+        case 'KeyD': this.mode = 'delete'; break;
         case 'Enter':
           if (this.playing) break;
           switch (this.mode) {
@@ -177,32 +177,32 @@ export class Editor {
         case 'Escape':
           this.drawing = false;
           break;
-        case 'j':
+        case 'KeyJ':
           navigator.clipboard.writeText(JSON.stringify(this.level.toJSON()));
           break;
-        case 'c':
+        case 'KeyC':
           if (this.playing) break;
           this.level.coffee.pos = {
             x: Math.floor(this.camera.center.x / 8) * 8,
             y: Math.floor(this.camera.center.y / 8) * 8,
           }
           break;
-        case 'q':
+        case 'KeyQ':
           this.playing = !this.playing;
           break;
       }
     });
 
     document.addEventListener('keyup', (ev) => {
-      switch(ev.key) {
-        case ' ':
-        case 'w':
+      switch(ev.code) {
+        case 'Space':
+        case 'KeyW':
         case 'ArrowUp': this.directions.up = false; break;
-        case 's':
+        case 'KeyS':
         case 'ArrowDown': this.directions.down = false; break;
-        case 'a':
+        case 'KeyA':
         case 'ArrowLeft': this.directions.left = false; break;
-        case 'd':
+        case 'KeyD':
         case 'ArrowRight': this.directions.right = false; break;
       }
     });
