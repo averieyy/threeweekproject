@@ -1,15 +1,21 @@
 <script lang="ts">
   import { Game } from "$lib/parkour/game";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   let canvas: HTMLCanvasElement;
 
+  let game: Game;
+
   onMount(() => {
-    const game = new Game(canvas);
+    game = new Game(canvas);
     
     game.render();
   });
 
+  onDestroy(() => {
+    game.stop();
+  });
+  
 </script>
 
 <svelte:head>

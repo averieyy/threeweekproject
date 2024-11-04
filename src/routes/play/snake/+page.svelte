@@ -1,14 +1,20 @@
 <script lang="ts">
   import { Game } from "$lib/snake/game";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
 
 
 let canvas: HTMLCanvasElement;
 
+let game: Game;
+
 onMount(() => {
-  let game = new Game(canvas);
+  game = new Game(canvas);
 
   game.mainloop();
+});
+
+onDestroy(() => {
+  game.stop();
 });
 
 </script>

@@ -107,4 +107,8 @@ export class Game {
       this.die();
     }
   }
+
+  stop () {
+    clearInterval(this.maininterval);
+  }
 }

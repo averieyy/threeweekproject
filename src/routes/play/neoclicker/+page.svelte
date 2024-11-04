@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
 
   let points = $state(0);
   let pps = $state(0);
@@ -44,8 +44,11 @@
     fetch('/api/leaderboard', { method: 'POST', body: JSON.stringify({ gameid: 2, points: Math.round(score) }) });
   }
 
+  let mainloop: NodeJS.Timeout;
+  let leaderboardloop: NodeJS.Timeout;
+
   onMount(() => {
-    setInterval(() => {
+    mainloop = setInterval(() => {
       const tickpoints = (pps / 60);
       points += tickpoints;
       score += tickpoints;
@@ -54,7 +57,12 @@
     // Record this play to the database
     fetch('/api/play', { method: 'POST', body: '{"gameid": 2}' });
 
-    setInterval(updateLeaderboards, 60000); // Update leaderboard entry every 60 seconds
+    leaderboardloop = setInterval(updateLeaderboards, 60000); // Update leaderboard entry every 60 seconds
+  });
+
+  onDestroy(() => {
+    clearInterval(mainloop);
+    clearInterval(leaderboardloop);
   });
 
   const displayPoints = $derived(points.toFixed(1));

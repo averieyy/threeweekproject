@@ -34,6 +34,8 @@ export class Game {
 
   levelAnimation?: LevelAnimation;
 
+  maininterval: NodeJS.Timeout;
+
   constructor (canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     const context = canvas.getContext('2d');
@@ -59,7 +61,7 @@ export class Game {
 
     this.starttime = Date.now();
 
-    this.mainloop();
+    this.maininterval = this.mainloop();
 
     // Record this play to the database
     fetch('/api/play', { method: 'POST', body: '{"gameid": 0}' });
@@ -152,7 +154,7 @@ export class Game {
   }
 
   mainloop () {
-    setInterval(() => {
+    return setInterval(() => {
       if (this.player.won) {
         if (!this.updatedHighscore) {
           fetch('/api/leaderboard', {method: 'POST', body: JSON.stringify({gameid: 0, points: this.currenttime})});
@@ -210,5 +212,9 @@ export class Game {
       this.render();
     }, 1000 / Game.FPS);
 
+  }
+
+  stop () {
+    clearInterval(this.maininterval);
   }
 }
