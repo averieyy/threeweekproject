@@ -41,5 +41,5 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
   if (loggedin)
     return json({message: 'Authenticated'}, {status: 200});
   
-  return json({message: 'User not found'}, {status: 403});
+  return json({message: 'User not found'}, { status: 404 });
 }

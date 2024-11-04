@@ -20,7 +20,7 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
 
   // TOTP
   const secret = Secret.fromBase32(user.totpsecret);
-  const totp = Authentication.generateTOTPObject(secret);
+  const totp = Authentication.generateTOTPObject(secret, user);
 
   // Verify token
   const authenticated = totp.validate({token: code, window: 2});

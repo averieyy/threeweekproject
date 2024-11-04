@@ -12,5 +12,6 @@ export const load: PageServerLoad = async ({ cookies }) => {
   
   return {
     totpsecret: user.totpsecret,
+    user
   }
 };

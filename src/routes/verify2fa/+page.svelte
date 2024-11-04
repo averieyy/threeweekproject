@@ -13,7 +13,7 @@
 
   const toggleShowCode = () => justshowcode = !justshowcode; 
 
-  const uri = Authentication.generateTOTPObject(Secret.fromBase32(token)).toString();
+  const uri = Authentication.generateTOTPObject(Secret.fromBase32(token), data.user).toString();
   let qrcode: string = $state('');
 
   onMount(async () => {

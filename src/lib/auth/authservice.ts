@@ -1,3 +1,4 @@
+import type { User } from '$lib/db/user';
 import { TOTP, Secret } from 'otpauth';
 
 export class Authentication {
@@ -5,10 +6,10 @@ export class Authentication {
     return new Secret({size: 16});
   }
 
-  public static generateTOTPObject (secret: Secret) {
+  public static generateTOTPObject (secret: Secret, user: User) {
     return new TOTP({
-      issuer: 'averieyy not INC',
-      label: 'Game server',
+      issuer: 'Game server',
+      label: user.username,
       algorithm: 'SHA1',
       digits: 6,
       period: 30,
@@ -16,7 +17,7 @@ export class Authentication {
     });
   }
 
-  public static validateToken (secret: Secret, token: string) {
-    this.generateTOTPObject(secret).validate({ token, window: 1 });
+  public static validateToken (secret: Secret, token: string, user: User) {
+    this.generateTOTPObject(secret, user).validate({ token, window: 1 });
   }
 }
