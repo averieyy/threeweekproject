@@ -1,18 +1,16 @@
 import { getDatabase } from "$lib/db/db";
 import { getUserFromToken } from "$lib/db/token";
-import type { RequestHandler } from "@sveltejs/kit";
+import { json, type RequestHandler } from "@sveltejs/kit";
 
 export const POST: RequestHandler = async ({ cookies, request }) => {
-  const respond = (response: object, status:number) => new Response(JSON.stringify(response), { status });
-  
   const token = cookies.get('token');
-  if (!token) return respond({ message: 'Unauthorized' }, 403);
+  if (!token) return json({ message: 'Unauthorized' }, { status: 403 });
 
   const database = await getDatabase();
   
   const user = await getUserFromToken(token);
 
-  if (!user) return respond({message: 'Unauthorized'}, 403);
+  if (!user) return json({message: 'Unauthorized'}, { status: 403 });
   
   const { games } = database.data;
 
@@ -20,7 +18,7 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
 
   const game = games.find(g => g.id == gameid);
 
-  if (!game) return respond({message: 'Game not found'}, 404);
+  if (!game) return json({message: 'Game not found'}, { status: 404 });
 
   database.update(({ leaderboard }) => {
     const entry = leaderboard.find(l => l.gameid == gameid && l.userid == user.id);
@@ -34,5 +32,5 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
     else leaderboard.push({ gameid, points, userid: user.id });
   });
 
-  return respond({message: 'Changed entry'}, 200);
+  return json({message: 'Changed entry'}, { status: 200 });
 }

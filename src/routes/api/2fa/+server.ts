@@ -1,24 +1,22 @@
 import { Authentication } from "$lib/auth/authservice";
 import { getDatabase } from "$lib/db/db";
 import { getUserFromToken } from "$lib/db/token";
-import { type RequestHandler } from "@sveltejs/kit";
+import { json, type RequestHandler } from "@sveltejs/kit";
 import { Secret } from "otpauth";
 
 export const POST: RequestHandler = async ({ cookies, request }) => {
-  const respond = (content:object, status: number, headers: HeadersInit = {}) => new Response(JSON.stringify(content), {status, headers});
-  
   const { code } = await request.json();
 
   const token = cookies.get('token');
 
   if (!token)
-    return respond({message: 'Not authenticated'}, 302, {'Location': '/login'});
+    return json({message: 'Not authenticated'}, {headers: {'Location': '/login'}, status: 302});
 
   const database = await getDatabase();
 
   const user = await getUserFromToken(token, true);
 
-  if (!user) return respond({message: 'Not authenticated', status: 403}, 403);
+  if (!user) return json({message: 'Not authenticated'}, { status: 403 });
 
   // TOTP
   const secret = Secret.fromBase32(user.totpsecret);
@@ -28,7 +26,7 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
   const authenticated = totp.validate({token: code, window: 2});
   
   if (authenticated == null) {
-    return respond({message: 'Authentication code invalid'}, 403);
+    return json({message: 'Authentication code invalid'}, { status: 403 });
   }
 
   database.update(({ tokens, users }) => {
@@ -38,5 +36,5 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
     if (u) u.registered2fa = true;
   });
 
-  return respond({message: 'Authenticated'}, 200);
+  return json({message: 'Authenticated'}, { status: 200 });
 }
