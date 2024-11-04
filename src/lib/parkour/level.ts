@@ -1,5 +1,8 @@
 import { Platform } from "./platform";
 import type { Vector2 } from "./vector2";
+import { Parallax } from "./parallax";
+import type { Camera } from "./camera";
+import { HitBox } from "./hitbox";
 
 import { InfoPlaque } from "./infoplaque";
 import { BouncePad } from "./bouncepad";
@@ -10,9 +13,7 @@ import tutorial from '$lib/parkour/levels/tutorial.json';
 import airbounce from '$lib/parkour/levels/airbounce.json';
 import hops from '$lib/parkour/levels/hops.json';
 import longslide from '$lib/parkour/levels/longslide.json';
-import { Parallax } from "./parallax";
-import type { Camera } from "./camera";
-import { HitBox } from "./hitbox";
+import finalrush from '$lib/parkour/levels/finalrush.json';
 
 interface jsonLevel {
   name: string,
@@ -141,6 +142,7 @@ export class Level {
       Level.fromJSON(1, longslide),
       Level.fromJSON(2, hops),
       Level.fromJSON(3, airbounce),
+      Level.fromJSON(4, finalrush),
     ];
   }
 }
