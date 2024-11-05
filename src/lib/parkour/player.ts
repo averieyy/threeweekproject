@@ -16,6 +16,7 @@ export class Player implements Renderable {
   velocity: Vector2 = { x: 0, y: 0 };
   position: Vector2;
   sliding: boolean = false;
+  juststoppedsliding: boolean = false;
 
   ground?: Platform;
 
@@ -43,11 +44,16 @@ export class Player implements Renderable {
   }
 
   tick (directionkeys: { up: boolean, down: boolean, left: boolean, right: boolean }, level: Level, camera: Camera) {
+    this.juststoppedsliding = false;
+
     this.move(directionkeys);
 
     // Tick
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
+
+    if (this.juststoppedsliding)
+      this.position.y -= 4;
 
     this.ground = undefined;
 
@@ -180,6 +186,7 @@ export class Player implements Renderable {
       this.sliding = true;
     }
     else {
+      if (this.sliding) this.juststoppedsliding = true;
       this.sliding = false;
     }
     if (up && this.ground && !this.sliding) {
