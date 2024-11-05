@@ -11,15 +11,15 @@
 </svelte:head>
 
 <main>
-  <div class="name">
-    <h2>{data.game.name}</h2>
-    {#if data.loggedin}
-      <a href={data.game.url} class="playbtn" title="Play"><Icon icon="play_arrow" /></a>
-    {:else}
-      <a href={"/login?redirect=" + data.game.url} class="playbtn">Log in to play!</a>
-    {/if}
-  </div>
   <article>
+    <div class="name">
+      <h2>{data.game.name}</h2>
+      {#if data.loggedin}
+        <a href={data.game.url} class="playbtn" title="Play"><Icon icon="play_arrow" /></a>
+      {:else}
+        <a href={"/login?redirect=" + data.game.url} class="playbtn">Log in to play!</a>
+      {/if}
+    </div>
     <section id="about">
       <h3>About</h3>
       <p class="description">
@@ -42,6 +42,11 @@
 </main>
 
 <style>
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   a {
     display: flex;
     flex-direction: row;
@@ -98,6 +103,7 @@
     display: flex;
     flex-direction: column;
     gap: .5rem;
+    max-width: 750px;
   }
   section {
     display: flex;
