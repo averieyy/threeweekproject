@@ -29,7 +29,7 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
       )
         entry.points = points;
     }
-    else leaderboard.push({ gameid, points, userid: user.id });
+    else leaderboard.push({ gameid, points, userid: user.id, date: new Date() });
   });
 
   return json({message: 'Changed entry'}, { status: 200 });
