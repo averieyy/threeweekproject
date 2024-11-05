@@ -16,7 +16,7 @@
           <span>Player</span>
           <span>{game.speedrunning ? "Time" : "Points"}</span>
         </div>
-        {#each entries as entry}
+        {#each (entries.sort((a, b) => (a.points - b.points) * (game.speedrunning ? 1 : -1))) as entry}
           <div class="leaderboardentry">
             <span>
               {entry.user}

@@ -46,15 +46,13 @@ export const load: PageServerLoad = async () => {
 
     const user = users.find(u => u.id == entry.userid);
 
+    if (!user) continue; // This should not happen, but just in case
+
     leaderboards[entry.gameid].push({
       gameid: entry.gameid,
       points: entry.points,
-      user: user?.username || 'BlondePterodactyl_1997', // Random name
+      user: user.username,
     });
-  }
-
-  for (const game of games) {
-    leaderboards[game.id]?.sort((a, b) => (game.speedrunning ? a.points - b.points : b.points - a.points));
   }
 
   return {
