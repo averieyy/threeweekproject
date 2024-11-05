@@ -25,7 +25,6 @@ export class Game {
 
   lasttime : number = Date.now();
   totaltime: number = 0;
-  currenttime: number = 0;
   paused: boolean = false;
 
   updatedHighscore: boolean = false;
@@ -166,7 +165,7 @@ export class Game {
     return setInterval(() => {
       if (this.player.won) {
         if (!this.updatedHighscore) {
-          fetch('/api/leaderboard', {method: 'POST', body: JSON.stringify({gameid: 0, points: this.currenttime})});
+          fetch('/api/leaderboard', {method: 'POST', body: JSON.stringify({gameid: 0, points: this.totaltime})});
           
           this.updatedHighscore = true;
         }
