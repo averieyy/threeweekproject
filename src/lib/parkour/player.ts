@@ -234,7 +234,7 @@ export class Player implements Renderable {
     this.dead = false;
 
     // Reset everything
-    this.position = level.startPos;
+    this.position = { ...level.startPos };
     this.velocity = { x: 0, y: 0 }
 
     this.direction = 0;
