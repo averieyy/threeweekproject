@@ -2,13 +2,13 @@ import { numbers } from "./assets";
 import { Camera } from "./camera";
 import { Level } from "./level";
 import { Player } from "./player";
-import { deadsplash, winsplash } from "./splash";
+import { deadsplash, PauseSplash, winsplash } from "./splash";
 import { toTimeString } from "../time";
 import { LevelAnimation } from "./levelanimation";
 
 Level.loadLevels();
 
-const numbersInNumbers = '0123456789.:';
+export const numbersInNumbers = '0123456789.:';
 
 export class Game {
   static readonly FPS = 60;
@@ -23,8 +23,10 @@ export class Game {
   player: Player;
   camera: Camera;
 
-  starttime : number;
+  lasttime : number = Date.now();
+  totaltime: number = 0;
   currenttime: number = 0;
+  paused: boolean = false;
 
   updatedHighscore: boolean = false;
 
@@ -35,6 +37,10 @@ export class Game {
   levelAnimation?: LevelAnimation;
 
   maininterval: NodeJS.Timeout;
+
+  deaths: number = 0;
+
+  pausedplash: PauseSplash;
 
   constructor (canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -56,10 +62,11 @@ export class Game {
     this.camera = new Camera(this.player.position, 200, 150);
     this.player.centercamera(this.camera);
     
+    this.pausedplash = new PauseSplash(this);
+
     this.keybinds();
     this.resize();
 
-    this.starttime = Date.now();
 
     this.maininterval = this.mainloop();
 
@@ -84,6 +91,7 @@ export class Game {
         case 'ArrowLeft': this.directions.left = true; break;
         case 'KeyD':
         case 'ArrowRight': this.directions.right = true; break;
+        case 'Escape': this.paused = !this.paused; break;
       }
     });
 
@@ -129,11 +137,12 @@ export class Game {
 
     deadsplash.render(this.bufferctx);
     winsplash.render(this.bufferctx);
-
-    this.levelAnimation?.render(this.bufferctx)
+    
+    this.levelAnimation?.render(this.bufferctx);
+    this.pausedplash.render(this.bufferctx);
 
     // Render time
-    const textTime = toTimeString(this.currenttime);
+    const textTime = toTimeString(this.totaltime);
 
     for (let i = 0; i < textTime.length; i++) {
       const image = numbers[numbersInNumbers.indexOf(textTime[i])];
@@ -170,16 +179,27 @@ export class Game {
 
         this.currentlevel.updateVisiblePlatforms(this.camera);
 
-        this.currenttime = Date.now() - this.starttime;
+        // Timing
+        const currenttime = Date.now();
 
-        if (!this.levelAnimation)
+        if (!this.paused) this.totaltime += currenttime - this.lasttime;
+        
+        this.lasttime = currenttime;
+
+        if (!this.levelAnimation && !this.paused)
           this.player.tick(this.directions, this.currentlevel, this.camera);
-        else this.levelAnimation.update();
+        
+        if (this.levelAnimation && !this.paused) this.levelAnimation.update();
 
         if (!this.player.dead) deadsplash.hide();
+        if (this.paused && !this.pausedplash.showing) this.pausedplash.show();
+        if (!this.paused && this.pausedplash.showing) this.pausedplash.hide();
   
         if (this.player.dead) {
-          if (!deadsplash.showing) deadsplash.show();
+          if (!deadsplash.showing) {
+            this.deaths ++;
+            deadsplash.show();
+          }
         }
 
         if (this.player.hitbox.overlaps(this.currentlevel.coffee.hitbox) && !this.levelAnimation) {
@@ -204,7 +224,8 @@ export class Game {
           }
         }
   
-        deadsplash.update();
+        if (!this.paused)
+          deadsplash.update();
       }
 
       // Render

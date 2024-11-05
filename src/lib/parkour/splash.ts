@@ -1,6 +1,13 @@
 import DeadSplash from '$lib/assets/parkour/splashes/youdied.png';
 import WinSplash from '$lib/assets/parkour/splashes/youwon.png';
+import PauseSplashImg from '$lib/assets/parkour/splashes/paused.png';
+import SkullIcon from '$lib/assets/parkour/skullicon.png';
 import type { Renderable } from './renderable';
+import { type Game, numbersInNumbers } from './game';
+import { numbers } from './assets';
+
+const skulliconimg = new Image();
+skulliconimg.src = SkullIcon;
 
 export class Splash implements Renderable {
   image: CanvasImageSource;
@@ -32,7 +39,32 @@ export class Splash implements Renderable {
   }
 
   render(ctx: OffscreenCanvasRenderingContext2D) {
+    if (!this.showing) return;
     ctx.drawImage(this.image, 0, Math.floor(this.y));
+  }
+}
+
+export class PauseSplash extends Splash {
+  game: Game;
+
+  constructor(game: Game) {
+    super(PauseSplashImg);
+
+    this.game = game;
+  }
+
+  override render(ctx: OffscreenCanvasRenderingContext2D) {
+    if (!this.showing) return;
+    ctx.drawImage(this.image, 0, 0);
+    ctx.drawImage(skulliconimg, 4, 75);
+
+    const deathstring = this.game.deaths.toString()
+
+    for (let i = 0; i < deathstring.length; i++) {
+      const image = numbers[numbersInNumbers.indexOf(deathstring[i])];
+      if (!image) break;
+      ctx.drawImage(image, 23 + i * 4, 80);
+    }
   }
 }
 
