@@ -2,7 +2,7 @@ import { numbers } from "./assets";
 import { Camera } from "./camera";
 import { Level } from "./level";
 import { Player } from "./player";
-import { deadsplash, PauseSplash, winsplash } from "./splash";
+import { DeadSplash, PauseSplash, WinSplash } from "./splash";
 import { toTimeString } from "../time";
 import { LevelAnimation } from "./levelanimation";
 
@@ -40,6 +40,8 @@ export class Game {
   deaths: number = 0;
 
   pausedplash: PauseSplash;
+  winsplash: WinSplash = new WinSplash();
+  deadsplash: DeadSplash = new DeadSplash();
 
   constructor (canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -134,8 +136,8 @@ export class Game {
 
     this.currentlevel.coffee.render(this.bufferctx, this.camera);
 
-    deadsplash.render(this.bufferctx);
-    winsplash.render(this.bufferctx);
+    this.deadsplash.render(this.bufferctx);
+    this.winsplash.render(this.bufferctx);
     
     this.levelAnimation?.render(this.bufferctx);
     this.pausedplash.render(this.bufferctx);
@@ -170,9 +172,9 @@ export class Game {
           this.updatedHighscore = true;
         }
 
-        if (!winsplash.showing) winsplash.show();
+        if (!this.winsplash.showing) this.winsplash.show();
         
-        winsplash.update();
+        this.winsplash.update();
       }
       else {
 
@@ -190,14 +192,14 @@ export class Game {
         
         if (this.levelAnimation && !this.paused) this.levelAnimation.update();
 
-        if (!this.player.dead) deadsplash.hide();
+        if (!this.player.dead) this.deadsplash.hide();
         if (this.paused && !this.pausedplash.showing) this.pausedplash.show();
         if (!this.paused && this.pausedplash.showing) this.pausedplash.hide();
   
         if (this.player.dead) {
-          if (!deadsplash.showing) {
+          if (!this.deadsplash.showing) {
             this.deaths ++;
-            deadsplash.show();
+            this.deadsplash.show();
           }
         }
 
@@ -224,7 +226,7 @@ export class Game {
         }
   
         if (!this.paused)
-          deadsplash.update();
+          this.deadsplash.update();
       }
 
       // Render

@@ -1,5 +1,5 @@
-import DeadSplash from '$lib/assets/parkour/splashes/youdied.png';
-import WinSplash from '$lib/assets/parkour/splashes/youwon.png';
+import DeadSplashImg from '$lib/assets/parkour/splashes/youdied.png';
+import WinSplashImg from '$lib/assets/parkour/splashes/youwon.png';
 import PauseSplashImg from '$lib/assets/parkour/splashes/paused.png';
 import SkullIcon from '$lib/assets/parkour/skullicon.png';
 import type { Renderable } from './renderable';
@@ -68,5 +68,14 @@ export class PauseSplash extends Splash {
   }
 }
 
-export const deadsplash = new Splash(DeadSplash);
-export const winsplash = new Splash(WinSplash);
+export class WinSplash extends Splash {
+  constructor() {
+    super(WinSplashImg);
+  }
+}
+
+export class DeadSplash extends Splash {
+  constructor() {
+    super(DeadSplashImg);
+  }
+}
