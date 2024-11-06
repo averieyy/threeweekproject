@@ -1,137 +1,17 @@
 {
-  "name": "asdf",
-  "platforms": [
-    {
-      "pos": [-48,-256],
-      "width": 16,
-      "height": 288
-    },
-    {
-      "pos": [-32,16],
-      "width": 64,
-      "height": 16
-    },
-    {
-      "pos": [32,24],
-      "width": 64,
-      "height": 8
-    },
-    {
-      "pos": [116, 24],
-      "width": 16,
-      "height": 8
-    },
-    {
-      "pos": [152, 24],
-      "width": 16,
-      "height": 8
-    },
-    {
-      "pos": [184, 24],
-      "width": 16,
-      "height": 8
-    },
-    {
-      "pos": [216, 24],
-      "width": 16,
-      "height": 8
-    },
-    {
-      "pos": [248, 24],
-      "width": 64,
-      "height": 8
-    },
-    {
-      "pos": [248, 24],
-      "width": 64,
-      "height": 8
-    },
-    {
-      "pos": [312, 8],
-      "width": 64,
-      "height": 24
-    },
-    {
-      "pos": [408, 0],
-      "width": 24,
-      "height": 32
-    },
-    {
-      "pos": [432, 8],
-      "width": 256,
-      "height": 24
-    },
-    {
-      "pos": [536, -129],
-      "width": 16,
-      "height": 128
-    },
-    {
-      "pos": [664, 0],
-      "width": 24,
-      "height": 32
-    },
-    {
-      "pos": [688, 8],
-      "width": 32,
-      "height": 24
-    },
-    {
-      "pos": [744, 8],
-      "width": 8,
-      "height": 8
-    },
-    {
-      "pos": [776, 8],
-      "width": 8,
-      "height": 8
-    },
-    {
-      "pos": [808, 8],
-      "width": 8,
-      "height": 8
-    },
-    {
-      "pos": [840, 8],
-      "width": 32,
-      "height": 24
-    },
-    {
-      "pos": [872, 0],
-      "width": 32,
-      "height": 32
-    },
-    {
-      "pos": [904, 48],
-      "width": 128,
-      "height": 8
-    },
-    {
-      "pos": [1112, 48],
-      "width": 128,
-      "height": 8
-    },
-    {
-      "pos": [1252, -72],
-      "width": 160,
-      "height": 48
-    },
-    {
-      "pos": [1284, 0],
-      "width": 128,
-      "height": 56
-    },
-    {
-      "pos": [1412, 8],
-      "width": 64,
-      "height": 48
-    },
-    {
-      "pos": [1476, -72],
-      "width": 64,
-      "height": 128
-    }
+  "gravity": 0.175,
+  "name": "Tutorial",
+  "startpos": [
+    0,
+    0
   ],
+  "coffee": {
+    "pos": {
+      "x": 1436,
+      "y": -24
+    },
+    "redirect": 1
+  },
   "plaques": [
     {
       "id": "movement",
@@ -144,6 +24,223 @@
       "y": -64
     }
   ],
+  "platforms": [
+    {
+      "pos": [
+        1476,
+        -72
+      ],
+      "width": 64,
+      "height": 128
+    },
+    {
+      "pos": [
+        1412,
+        8
+      ],
+      "width": 64,
+      "height": 48
+    },
+    {
+      "pos": [
+        1284,
+        0
+      ],
+      "width": 128,
+      "height": 56
+    },
+    {
+      "pos": [
+        1112,
+        48
+      ],
+      "width": 128,
+      "height": 8
+    },
+    {
+      "pos": [
+        904,
+        48
+      ],
+      "width": 128,
+      "height": 8
+    },
+    {
+      "pos": [
+        872,
+        0
+      ],
+      "width": 32,
+      "height": 32
+    },
+    {
+      "pos": [
+        840,
+        8
+      ],
+      "width": 32,
+      "height": 24
+    },
+    {
+      "pos": [
+        688,
+        8
+      ],
+      "width": 32,
+      "height": 24
+    },
+    {
+      "pos": [
+        664,
+        0
+      ],
+      "width": 24,
+      "height": 32
+    },
+    {
+      "pos": [
+        432,
+        8
+      ],
+      "width": 256,
+      "height": 24
+    },
+    {
+      "pos": [
+        408,
+        0
+      ],
+      "width": 24,
+      "height": 32
+    },
+    {
+      "pos": [
+        312,
+        8
+      ],
+      "width": 64,
+      "height": 24
+    },
+    {
+      "pos": [
+        248,
+        24
+      ],
+      "width": 64,
+      "height": 8
+    },
+    {
+      "pos": [
+        248,
+        24
+      ],
+      "width": 64,
+      "height": 8
+    },
+    {
+      "pos": [
+        216,
+        24
+      ],
+      "width": 16,
+      "height": 8
+    },
+    {
+      "pos": [
+        184,
+        24
+      ],
+      "width": 16,
+      "height": 8
+    },
+    {
+      "pos": [
+        152,
+        24
+      ],
+      "width": 16,
+      "height": 8
+    },
+    {
+      "pos": [
+        116,
+        24
+      ],
+      "width": 16,
+      "height": 8
+    },
+    {
+      "pos": [
+        32,
+        24
+      ],
+      "width": 64,
+      "height": 8
+    },
+    {
+      "pos": [
+        -32,
+        16
+      ],
+      "width": 64,
+      "height": 16
+    },
+    {
+      "pos": [
+        -48,
+        -256
+      ],
+      "width": 16,
+      "height": 288
+    },
+    {
+      "pos": [
+        808,
+        8
+      ],
+      "width": 8,
+      "height": 8
+    },
+    {
+      "pos": [
+        776,
+        8
+      ],
+      "width": 8,
+      "height": 8
+    },
+    {
+      "pos": [
+        744,
+        8
+      ],
+      "width": 8,
+      "height": 8
+    },
+    {
+      "pos": [
+        1252,
+        -72
+      ],
+      "width": 160,
+      "height": 48
+    },
+    {
+      "pos": [
+        536,
+        -136
+      ],
+      "width": 16,
+      "height": 128
+    }
+  ],
+  "spikes": [
+    {
+      "width": 16,
+      "x": 536,
+      "y": -12
+    }
+  ],
   "bouncepads": [
     {
       "x": 1016,
@@ -153,15 +250,5 @@
       "x": 1224,
       "y": 40
     }
-  ],
-  "coffee": {
-    "pos": {
-      "x": 1436,
-      "y": -24
-    },
-    "redirect": 1
-  },
-  "gravity": 0.175,
-  "startpos": [0, 0],
-  "spikes": []
+  ]
 }
