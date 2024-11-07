@@ -43,7 +43,9 @@ export class Game {
   winsplash: WinSplash = new WinSplash();
   deadsplash: DeadSplash = new DeadSplash();
 
-  constructor (canvas: HTMLCanvasElement) {
+  wincallback?: (points: number) => void;
+
+  constructor (canvas: HTMLCanvasElement, wincallback?: (points: number) => void) {
     this.canvas = canvas;
     const context = canvas.getContext('2d');
     if (!context) throw Error('Could not get canvas context buffer');
@@ -68,11 +70,9 @@ export class Game {
     this.keybinds();
     this.resize();
 
+    this.wincallback = wincallback;
 
     this.maininterval = this.mainloop();
-
-    // Record this play to the database
-    fetch('/api/play', { method: 'POST', body: '{"gameid": 0}' });
   }
 
   keybinds () {
@@ -167,8 +167,8 @@ export class Game {
     return setInterval(() => {
       if (this.player.won) {
         if (!this.updatedHighscore) {
-          fetch('/api/leaderboard', {method: 'POST', body: JSON.stringify({gameid: 0, points: this.totaltime})});
-          
+          if (this.wincallback) this.wincallback(this.totaltime);
+
           this.updatedHighscore = true;
         }
 

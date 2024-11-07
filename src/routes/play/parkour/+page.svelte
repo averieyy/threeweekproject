@@ -7,8 +7,14 @@
   let game: Game;
 
   onMount(() => {
-    game = new Game(canvas);
-    
+    // Record this play to the database
+    fetch('/api/play', { method: 'POST', body: '{"gameid": 0}' });
+
+    game = new Game(canvas, (points) => {
+      // Update leaderboards
+      fetch('/api/leaderboard', { method: 'POST', body: JSON.stringify({ gameid: 0, points: points }) })
+    });
+
     game.render();
   });
 
