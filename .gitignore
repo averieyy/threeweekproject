@@ -22,3 +22,6 @@ db.json
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+#logs
+logs.txt

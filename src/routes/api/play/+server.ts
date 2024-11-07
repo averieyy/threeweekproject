@@ -1,5 +1,6 @@
 import { getDatabase } from "$lib/db/db";
 import { getUserFromToken } from "$lib/db/token";
+import { log } from "$lib/logs";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 export const POST: RequestHandler = async ({ cookies, request }) => {
@@ -8,13 +9,15 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
   if (gameid == undefined) return json({message: 'Not found'}, {status: 404});
   
   const token = cookies.get('token');
-  if (!token) return json({message: 'Unauthorized'}, {status: 403});
   
   const db = await getDatabase();
 
   const user = await getUserFromToken(token);
 
-  if (!user) return json({message: 'Unauthorized'}, {status: 403});
+  if (!user) {
+    log(`User tried to play game ${gameid} without loggin in`, 'WARN');
+    return json({message: 'Unauthorized'}, {status: 403});
+  }
 
   db.update(({ games }) => {
     const game = games.find(g => g.id == gameid);

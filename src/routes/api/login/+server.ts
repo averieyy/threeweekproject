@@ -3,6 +3,7 @@ import { getDatabase } from "$lib/db/db";
 import { hashPassword } from "$lib/auth/hasher";
 import { genToken, TOKENVALID } from "$lib/db/token";
 import type { token } from "$lib/db/token";
+import { log } from "$lib/logs";
 
 // const testaccount = await createTestAccount();
 
@@ -38,8 +39,10 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
     }
   }
 
-  if (loggedin)
+  if (loggedin) {
+    log(`User ${username} logged in`, 'INFO');
     return json({message: 'Authenticated'}, {status: 200});
+  }
   
   return json({message: 'User not found'}, { status: 404 });
 }

@@ -1,5 +1,6 @@
 import { getDatabase } from "$lib/db/db";
 import { getUserFromToken } from "$lib/db/token";
+import { log } from "$lib/logs";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 export const POST: RequestHandler = async ({ cookies }) => {
@@ -17,6 +18,8 @@ export const POST: RequestHandler = async ({ cookies }) => {
   });
   
   cookies.delete('token', { path: '/' });
+
+  log(`User ${user.username} logged out`, 'INFO');
 
   return json({ message: 'User logged out' }, { status: 200 });
 }

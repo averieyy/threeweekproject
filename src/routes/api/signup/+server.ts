@@ -3,6 +3,7 @@ import { genSalt, hashPassword } from "$lib/auth/hasher";
 import { getDatabase } from "$lib/db/db";
 import { genToken, TOKENVALID, type token } from "$lib/db/token";
 import type { User } from "$lib/db/user";
+import { log } from "$lib/logs";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 // Ethically sourced from https://emailregex.com
@@ -40,6 +41,8 @@ export const POST: RequestHandler = async ({cookies, request}) => {
 
   database.update(({ users }) => users.push(user));
   database.update(({ tokens }) => tokens.push(token));
+
+  log(`Created new user ${user.username}`, 'INFO');
 
   return json({code: 302, 'Location': '2fa'});
 }

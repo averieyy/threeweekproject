@@ -1,5 +1,6 @@
 import { getDatabase } from "$lib/db/db";
 import { getUserFromToken } from "$lib/db/token";
+import { log } from "$lib/logs";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 export const POST: RequestHandler = async ({ cookies, request }) => {
@@ -10,7 +11,10 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
   
   const user = await getUserFromToken(token);
 
-  if (!user) return json({message: 'Unauthorized'}, { status: 403 });
+  if (!user) {
+    log(`User tried to push leaderboard entry`, 'WARN');
+    return json({message: 'Unauthorized'}, { status: 403 })
+  };
   
   const { games } = database.data;
 
@@ -31,6 +35,8 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
     }
     else leaderboard.push({ gameid, points, userid: user.id, date: new Date() });
   });
+
+  log(`Leaderboard push from ${user.username} for ${game.name} with ${points} points`, 'INFO');
 
   return json({message: 'Changed entry'}, { status: 200 });
 }

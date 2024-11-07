@@ -3,7 +3,7 @@
   import { page } from "$app/stores";
   import Loginform from "$lib/components/loginform.svelte";
 
-  let errorMessage = $state('');
+  let errorMessage : string | undefined = $state('');
 
   const redirectURL = $page.url.searchParams.get('redirect');
 
@@ -23,10 +23,14 @@
         else goto('/login/2fa');
       }
       else {
-        if (resp.status == 400) {
-          errorMessage = (await resp.json()).message || 'An error occured while trying to sign in.';
+        errorMessage = '';
+        if (resp.status < 500) {
+          try {
+            errorMessage = (await resp.json()).message;
+          }
+          catch { }
         }
-        else errorMessage = 'An error occured while trying to sign in';
+        if (!errorMessage) errorMessage = 'An error occured while trying to sign in.';
       }
     });
   }

@@ -1,6 +1,7 @@
 import { Authentication } from "$lib/auth/authservice";
 import { getDatabase } from "$lib/db/db";
 import { getUserFromToken } from "$lib/db/token";
+import { log } from "$lib/logs";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { Secret } from "otpauth";
 
@@ -16,7 +17,10 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
 
   const user = await getUserFromToken(token, true);
 
-  if (!user) return json({message: 'Not authenticated'}, { status: 403 });
+  if (!user) {
+    log(`2fa attempted with invalid token`, 'WARN');
+    return json({message: 'Not authenticated'}, { status: 403 });
+  }
 
   // TOTP
   const secret = Secret.fromBase32(user.totpsecret);
@@ -35,6 +39,8 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
     if (t) t.authenticated = true
     if (u) u.registered2fa = true;
   });
+
+  log(`Authenticated user ${user.username}`, 'INFO');
 
   return json({message: 'Authenticated'}, { status: 200 });
 }
