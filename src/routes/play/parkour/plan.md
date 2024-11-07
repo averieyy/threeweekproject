@@ -1,4 +1,7 @@
-# Game plan
+# Original game plan
+
+> [!NOTE]
+> I moved away from this idea pretty quickly into development, because it did not really work. This is the reason why the "level transporter" is a coffee cup. A lot is still similar, except for the energy levels.
 
 _Inspired by [Coffee run (The blender studio film)](https://studio.blender.org/films/coffee-run/)_
 
