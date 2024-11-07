@@ -14,6 +14,7 @@ import airbounce from '$lib/parkour/levels/airbounce.json';
 import hops from '$lib/parkour/levels/hops.json';
 import longslide from '$lib/parkour/levels/longslide.json';
 import finalrush from '$lib/parkour/levels/finalrush.json';
+import finalchallenge from '$lib/parkour/levels/tower.json';
 
 interface jsonLevel {
   name: string,
@@ -143,6 +144,7 @@ export class Level {
       Level.fromJSON(2, hops),
       Level.fromJSON(3, airbounce),
       Level.fromJSON(4, finalrush),
+      Level.fromJSON(5, finalchallenge),
     ];
   }
 }

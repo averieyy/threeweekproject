@@ -178,7 +178,12 @@ export class Editor {
           this.drawing = false;
           break;
         case 'KeyJ':
-          navigator.clipboard.writeText(JSON.stringify(this.level.toJSON()));
+          try {
+            navigator.clipboard.writeText(JSON.stringify(this.level.toJSON()));
+          }
+          catch {
+            console.log(JSON.stringify(this.level.toJSON()));
+          }
           break;
         case 'KeyC':
           if (this.playing) break;
@@ -190,7 +195,11 @@ export class Editor {
         case 'KeyQ':
           this.playing = !this.playing;
           break;
+        case 'KeyM':
+          this.level.startPos = { ...this.camera.center };
+          break;
       }
+      this.updateLocalStorage();
     });
 
     document.addEventListener('keyup', (ev) => {
