@@ -46,6 +46,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    
+    padding: 1rem;
   }
   a {
     display: flex;
@@ -99,10 +101,10 @@
     padding-left: 0;
   }
   article {
-    margin: 1rem;
     display: flex;
     flex-direction: column;
     gap: .5rem;
+    width: 100%;
     max-width: 750px;
   }
   section {
